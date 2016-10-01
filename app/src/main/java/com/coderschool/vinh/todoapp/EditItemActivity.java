@@ -15,7 +15,7 @@ import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements TaskDialogFragment.TaskDialogListener {
+public class EditItemActivity extends AppCompatActivity implements TaskDialogFragment.TaskDialogListener {
 
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements TaskDialogFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_edit_item);
 
         tasks = new ArrayList<Task> ();
 
