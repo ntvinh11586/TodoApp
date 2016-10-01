@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#646DBF</color>
+    <color name="colorPrimaryDark">#43497F</color>
+    <color name="navigationBarColor">@color/colorPrimaryDark</color>
+    <color name="colorAccent">#7983E5</color>
+    <color name="windowBackground">#EDEDED</color>
+    <color name="colorText">#7983E5</color>
+    <color name="colorPriorityLow">#618B59</color>
+    <color name="colorPriorityMedium">#7B7B01</color>
+    <color name="colorPriorityHigh">#B42319</color>
+    <color name="colorButtonDisable">#D0D9DD</color>
+    <color name="colorButtonEnable">@color/colorAccent</color>
+</resources>
