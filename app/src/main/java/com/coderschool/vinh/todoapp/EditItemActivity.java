@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.SQLPackage;
@@ -55,7 +56,7 @@ public class EditItemActivity extends AppCompatActivity implements TaskDialogFra
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 tasks.remove(position);
                 adapter.notifyDataSetChanged();
-
+                Toast.makeText(EditItemActivity.this, "Delete item at " + position, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
