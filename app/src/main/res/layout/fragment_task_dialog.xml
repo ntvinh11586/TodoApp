@@ -1,120 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/layout_task_description"
-    android:background="@color/windowBackground">
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+        android:layout_marginRight="8dp"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TASK NAME"
-            android:id="@+id/textView"
             android:layout_gravity="center|top"
             android:layout_margin="8dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorText"/>
+            android:text="TASK NAME"
+            android:textColor="@color/colorText"
+            android:textStyle="bold" />
+
         <EditText
+            android:id="@+id/text_input_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/text_input_text"
-            android:layout_below="@+id/textView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="8dp"/>
+            android:layout_below="@+id/textView"
+            android:layout_margin="8dp"
+            android:hint="Input your task..."
+            android:inputType="text" />
+
         <TextView
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PRIORITY"
-            android:id="@+id/textView1"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorText" />
+            android:text="PRIORITY"
+            android:textColor="@color/colorText"
+            android:textStyle="bold" />
 
         <RadioGroup
-            android:orientation="horizontal"
+            android:id="@+id/radio_group_priority_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/radio_group_priority_1"
+            android:layout_margin="8dp"
             android:gravity="center"
-            android:layout_margin="8dp">
+            android:orientation="horizontal">
+
             <RadioButton
+                android:id="@+id/radio_low"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Low"
                 android:checked="true"
-                android:id="@+id/radio_low" />
+                android:text="Low" />
+
             <RadioButton
+                android:id="@+id/radio_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medium"
                 android:checked="false"
-                android:id="@+id/radio_medium" />
+                android:text="Medium" />
+
             <RadioButton
+                android:id="@+id/radio_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="High"
                 android:checked="false"
-                android:id="@+id/radio_high" />
+                android:text="High" />
         </RadioGroup>
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DUE DATE"
-            android:id="@+id/textView2"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorText" />
+            android:text="DUE DATE"
+            android:textColor="@color/colorText"
+            android:textStyle="bold" />
+
         <DatePicker
+            android:id="@+id/date_picker_due_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/date_picker_due_date"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            android:layout_margin="8dp" />
+            android:datePickerMode="spinner" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_margin="8dp"
             android:gravity="center"
-            android:layout_margin="8dp" >
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/button_discard"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CANCEL"
-                android:id="@+id/button_discard"
-                android:textAllCaps="false"
                 android:background="@color/windowBackground"
-                style="?android:attr/borderlessButtonStyle"
+                android:text="CANCEL"
+                android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
+
             <Button
+                android:id="@+id/button_save"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OK"
-                android:id="@+id/button_save"
-                android:enabled="false"
-                android:textAllCaps="false"
                 android:background="@color/windowBackground"
-                style="?android:attr/borderlessButtonStyle"
+                android:enabled="false"
+                android:text="OK"
+                android:textAllCaps="false"
                 android:textColor="@drawable/drawable_button_save"
                 android:textStyle="bold" />
-
         </LinearLayout>
-
     </LinearLayout>
-
 </ScrollView>

@@ -1,8 +1,12 @@
 package com.coderschool.vinh.todoapp.models;
 
 
-public class Task {
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 
+import com.coderschool.vinh.todoapp.R;
+
+public class Task {
     public String name;
     public String priority;
     public Date date;
@@ -13,4 +17,14 @@ public class Task {
         this.date = date;
     }
 
+    public static int getColor(Context context, String s) {
+        switch (s) {
+            case "Low":
+                return ContextCompat.getColor(context, R.color.colorPriorityLow);
+            case "Medium":
+                return ContextCompat.getColor(context, R.color.colorPriorityMedium);
+            default:
+                return ContextCompat.getColor(context, R.color.colorPriorityHigh);
+        }
+    }
 }
