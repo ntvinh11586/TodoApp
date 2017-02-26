@@ -1,4 +1,4 @@
-package com.coderschool.vinh.todoapp.data;
+package com.coderschool.vinh.todoapp.repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,7 @@ import com.coderschool.vinh.todoapp.models.SQLPackage;
 
 import java.util.ArrayList;
 
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TODO_APP_DATABASE";
     private static final String TABLE_PACKAGES = "TASK";
@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_MONTH = "MONTH";
     private static final String KEY_YEAR = "YEAR";
 
-    public DatabaseHandler(Context context) {
+    public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
