@@ -11,8 +11,7 @@ import android.widget.Toast;
 
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
-import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
-import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
+import com.coderschool.vinh.todoapp.fragments.TaskDialog;
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
@@ -22,11 +21,11 @@ import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements TaskDialogListener,
+        implements TaskDialog.TaskDialogOnFinishedListener,
             AdapterView.OnItemLongClickListener,
             AdapterView.OnItemClickListener,
             View.OnClickListener {
-    private static final String FRAGMENT_EDIT_NAME = "TaskDialogFragment";
+    private static final String FRAGMENT_EDIT_NAME = "TaskDialog";
 
     private FloatingActionButton fab;
     private ListView lvTasks;
@@ -71,14 +70,12 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         dbTasks.deleteAllPackages();
-        for (Task task : tasks) {
-            dbTasks.addPackage(task);
-        }
+        dbTasks.addAllPackages(tasks);
     }
 
-    private void showEditDialog() {
+    private void showTaskDialog(Task task) {
         FragmentManager fm = getSupportFragmentManager();
-        TaskDialogFragment editNameDialogFragment = TaskDialogFragment.newInstance(null);
+        TaskDialog editNameDialogFragment = TaskDialog.newInstance(task);
         editNameDialogFragment.show(fm, FRAGMENT_EDIT_NAME);
     }
 
@@ -116,14 +113,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         taskPreferences.setCurrentPosition(position);
-        FragmentManager fm = getSupportFragmentManager();
-        TaskDialogFragment editNameDialogFragment
-                = TaskDialogFragment.newInstance(tasks.get(position));
-        editNameDialogFragment.show(fm, FRAGMENT_EDIT_NAME);
+        showTaskDialog(tasks.get(position));
     }
 
     @Override
     public void onClick(View v) {
-        showEditDialog();
+        showTaskDialog(null);
     }
 }

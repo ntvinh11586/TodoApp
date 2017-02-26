@@ -29,7 +29,7 @@ import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.Calendar;
 
-public class TaskDialogFragment extends DialogFragment
+public class TaskDialog extends DialogFragment
         implements View.OnClickListener, TextWatcher {
     private EditText edTaskName;
     private RadioGroup rgPriority;
@@ -42,10 +42,14 @@ public class TaskDialogFragment extends DialogFragment
 
     private int isChanged; // ???
 
-    public TaskDialogFragment() {
+    public interface TaskDialogOnFinishedListener {
+        void onTaskDialogFinished(DialogResponse response);
     }
 
-    public static TaskDialogFragment newInstance(Task task) {
+    public TaskDialog() {
+    }
+
+    public static TaskDialog newInstance(Task task) {
         Bundle args = new Bundle();
         if (task != null) {
             args.putInt("available", 1);
@@ -58,7 +62,7 @@ public class TaskDialogFragment extends DialogFragment
             args.putInt("available", 0);
         }
 
-        TaskDialogFragment frag = new TaskDialogFragment();
+        TaskDialog frag = new TaskDialog();
         frag.setArguments(args);
         return frag;
     }
@@ -166,7 +170,7 @@ public class TaskDialogFragment extends DialogFragment
             String priority = rbPriority.getText().toString();
             Date dueDate = new Date(tpDueDate.getDayOfMonth(), tpDueDate.getMonth() + 1, tpDueDate.getYear());
             String taskName = edTaskName.getText().toString();
-            TaskDialogListener listener = (TaskDialogListener) getActivity();
+            TaskDialogOnFinishedListener listener = (TaskDialogOnFinishedListener) getActivity();
 
             listener.onTaskDialogFinished(
                     new DialogResponse(isChanged, taskName, priority, dueDate)
