@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
 import com.coderschool.vinh.todoapp.models.DatabaseHandler;
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
@@ -21,7 +22,7 @@ import com.coderschool.vinh.todoapp.models.Task;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements TaskDialogFragment.TaskDialogListener,
+        implements TaskDialogListener,
             AdapterView.OnItemLongClickListener,
             AdapterView.OnItemClickListener,
             View.OnClickListener {
@@ -84,10 +85,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFinishTaskDialog(int isChanged,
-                                   final String taskName,
-                                   final String priority,
-                                   final Date dueDate) {
+    public void onTaskDialogFinished(int isChanged,
+                                     final String taskName,
+                                     final String priority,
+                                     final Date dueDate) {
         if (isChanged == 0) {
             // add on app
             Task newTask = new Task(taskName, priority, dueDate);
