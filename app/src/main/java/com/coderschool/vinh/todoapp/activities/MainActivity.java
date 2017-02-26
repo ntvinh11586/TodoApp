@@ -4,17 +4,16 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
-import com.coderschool.vinh.todoapp.models.DatabaseHandler;
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
+import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
+import com.coderschool.vinh.todoapp.models.DatabaseHandler;
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.SQLPackage;
 import com.coderschool.vinh.todoapp.models.Task;
@@ -70,12 +69,6 @@ public class MainActivity extends AppCompatActivity
             dbTasks.addPackage(new SQLPackage(task.name, task.priority,
                     task.date.day, task.date.month, task.date.year));
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     private void showEditDialog() {
