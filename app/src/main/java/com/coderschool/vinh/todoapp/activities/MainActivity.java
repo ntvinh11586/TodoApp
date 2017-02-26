@@ -15,7 +15,6 @@ import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.DialogResponse;
-import com.coderschool.vinh.todoapp.models.SQLPackage;
 import com.coderschool.vinh.todoapp.models.Task;
 import com.coderschool.vinh.todoapp.repositories.DBHandler;
 import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
@@ -45,12 +44,11 @@ public class MainActivity extends AppCompatActivity
 
         // get dbTasks
         dbTasks = new DBHandler(this);
-        ArrayList<SQLPackage> sqlPackages = dbTasks.getAllPackages();
+        ArrayList<Task> sqlPackages = dbTasks.getAllPackages();
 
         tasks = new ArrayList<>();
-        for (SQLPackage pk : sqlPackages) {
-            tasks.add(new Task(pk.name, pk.priority,
-                    new Date(pk.day, pk.month, pk.year)));
+        for (Task pk : sqlPackages) {
+            tasks.add(new Task(pk.name, pk.priority, pk.date));
         }
 
         lvTasks = (ListView)findViewById(R.id.list_task_item);
@@ -74,8 +72,7 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         dbTasks.deleteAllPackages();
         for (Task task : tasks) {
-            dbTasks.addPackage(new SQLPackage(task.name, task.priority,
-                    task.date.getDay(), task.date.getMonth(), task.date.getYear()));
+            dbTasks.addPackage(task);
         }
     }
 

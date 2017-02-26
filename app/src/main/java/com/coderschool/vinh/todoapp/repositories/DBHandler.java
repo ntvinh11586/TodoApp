@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.coderschool.vinh.todoapp.models.SQLPackage;
+import com.coderschool.vinh.todoapp.models.Date;
+import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
 
@@ -44,21 +45,21 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addPackage(SQLPackage sqlPackage) {
+    public void addPackage(Task sqlPackage) {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, sqlPackage.name);
         values.put(KEY_PRIORITY, sqlPackage.priority);
-        values.put(KEY_DAY, sqlPackage.day);
-        values.put(KEY_MONTH, sqlPackage.month);
-        values.put(KEY_YEAR, sqlPackage.year);
+        values.put(KEY_DAY, sqlPackage.date.day);
+        values.put(KEY_MONTH, sqlPackage.date.month);
+        values.put(KEY_YEAR, sqlPackage.date.year);
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PACKAGES, null, values);
         db.close();
     }
 
-    public ArrayList<SQLPackage> getAllPackages() {
-        ArrayList<SQLPackage> packageList = new ArrayList<>();
+    public ArrayList<Task> getAllPackages() {
+        ArrayList<Task> packageList = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TABLE_PACKAGES;
 
@@ -68,13 +69,14 @@ public class DBHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                SQLPackage sqlPackage = new SQLPackage();
+                Task sqlPackage = new Task();
                 sqlPackage.id = Integer.parseInt(cursor.getString(0));
                 sqlPackage.name = cursor.getString(1);
                 sqlPackage.priority = cursor.getString(2);
-                sqlPackage.day = Integer.parseInt(cursor.getString(3));
-                sqlPackage.month = Integer.parseInt(cursor.getString(4));
-                sqlPackage.year = Integer.parseInt(cursor.getString(5));
+                sqlPackage.date = new Date();
+                sqlPackage.date.day = Integer.parseInt(cursor.getString(3));
+                sqlPackage.date.month = Integer.parseInt(cursor.getString(4));
+                sqlPackage.date.year = Integer.parseInt(cursor.getString(5));
                 packageList.add(sqlPackage);
             } while (cursor.moveToNext());
         }

@@ -2,9 +2,12 @@ package com.coderschool.vinh.todoapp.models;
 
 
 public class Date {
-    private int day;
-    private int month;
-    private int year;
+    public int day;
+    public int month;
+    public int year;
+
+    public Date() {
+    }
 
     public Date(int day, int month, int year) {
         this.day = day;
