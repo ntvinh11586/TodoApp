@@ -1,7 +1,7 @@
 package com.coderschool.vinh.todoapp.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,56 +9,45 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.coderschool.vinh.todoapp.R;
+import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
+    TextView tvName;
+    TextView tvDate;
+    TextView tvPriority;
 
     public TaskAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         Task task = getItem(position);
 
-        if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_task, parent, false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.item_task, parent, false);
+        }
 
-        TextView tvName = (TextView)convertView.findViewById(R.id.text_task_name);
-        TextView tvDate = (TextView)convertView.findViewById(R.id.text_task_date);
-        TextView tvPriority = (TextView)convertView.findViewById(R.id.text_task_priority);
+        tvName = (TextView)convertView.findViewById(R.id.text_task_name);
+        tvDate = (TextView)convertView.findViewById(R.id.text_task_date);
+        tvPriority = (TextView)convertView.findViewById(R.id.text_task_priority);
 
-
+        tvDate.setText(
+                Integer.toString(task.date.day) + " "
+                + Date.getMonthString(task.date.month) + ", "
+                + Integer.toString(task.date.year)
+        );
         tvName.setText(task.name);
 
-        String monthInLeter = "";
-        switch (task.date.month) {
-            case 1: monthInLeter = "Jan"; break;
-            case 2: monthInLeter = "Feb"; break;
-            case 3: monthInLeter = "Mar"; break;
-            case 4: monthInLeter = "Apr"; break;
-            case 5: monthInLeter = "May"; break;
-            case 6: monthInLeter = "Jun"; break;
-            case 7: monthInLeter = "Jul"; break;
-            case 8: monthInLeter = "Aug"; break;
-            case 9: monthInLeter = "Sep"; break;
-            case 10: monthInLeter = "Oct"; break;
-            case 11: monthInLeter = "Nov"; break;
-            case 12: monthInLeter = "Dec"; break;
-        }
-
-        tvDate.setText(Integer.toString(task.date.day) + " " + monthInLeter + ", " + Integer.toString(task.date.year));
+        int color = Task.getColor(getContext(), task.priority);
         tvPriority.setText(task.priority);
+        tvPriority.setTextColor(color);
 
-        if (tvPriority.getText().toString().equals("Low")) {
-            tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPriorityLow));
-        } else if (tvPriority.getText().toString().equals("Medium")) {
-            tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPriorityMedium));
-        } else {
-            tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPriorityHigh));
-        }
         return convertView;
     }
 }
