@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import com.coderschool.vinh.todoapp.R;
 
 public class Task {
-
     public String name;
     public String priority;
     public Date date;

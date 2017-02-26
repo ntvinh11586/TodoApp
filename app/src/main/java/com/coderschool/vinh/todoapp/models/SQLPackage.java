@@ -2,7 +2,6 @@ package com.coderschool.vinh.todoapp.models;
 
 
 public class SQLPackage {
-
     public int id;
     public String name;
     public String priority;
@@ -21,5 +20,4 @@ public class SQLPackage {
     public SQLPackage() {
 
     }
-
 }

@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TODOAPP_DATABASE";
     private static final String TABLE_PACKAGES = "TASK";
@@ -34,35 +33,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_DAY + " INTEGER,"
                 + KEY_MONTH + " INTEGER,"
                 + KEY_YEAR + " INTEGER" + ")";
-
         db.execSQL(CREATE_PACKAGES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGES);
-
         onCreate(db);
     }
 
     public void addPackage(SQLPackage sqlPackage) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
-
         values.put(KEY_NAME, sqlPackage.name);
         values.put(KEY_PRIORITY, sqlPackage.priority);
         values.put(KEY_DAY, sqlPackage.day);
         values.put(KEY_MONTH, sqlPackage.month);
         values.put(KEY_YEAR, sqlPackage.year);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PACKAGES, null, values);
         db.close();
     }
 
     public ArrayList<SQLPackage> getAllPackages() {
-        ArrayList<SQLPackage> packageList = new ArrayList<SQLPackage>();
+        ArrayList<SQLPackage> packageList = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TABLE_PACKAGES;
 
@@ -73,18 +67,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 SQLPackage sqlPackage = new SQLPackage();
-
                 sqlPackage.id = Integer.parseInt(cursor.getString(0));
                 sqlPackage.name = cursor.getString(1);
                 sqlPackage.priority = cursor.getString(2);
                 sqlPackage.day = Integer.parseInt(cursor.getString(3));
                 sqlPackage.month = Integer.parseInt(cursor.getString(4));
                 sqlPackage.year = Integer.parseInt(cursor.getString(5));
-
                 packageList.add(sqlPackage);
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
         return packageList;
     }
 
@@ -95,7 +88,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.delete(TABLE_PACKAGES, null, null);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             db.endTransaction();
         }
