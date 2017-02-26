@@ -1,4 +1,4 @@
-package com.coderschool.vinh.todoapp;
+package com.coderschool.vinh.todoapp.fragments;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -23,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.Task;
 

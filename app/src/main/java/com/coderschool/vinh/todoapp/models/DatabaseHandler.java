@@ -1,12 +1,10 @@
-package com.coderschool.vinh.todoapp;
+package com.coderschool.vinh.todoapp.models;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.coderschool.vinh.todoapp.models.SQLPackage;
 
 import java.util.ArrayList;
 

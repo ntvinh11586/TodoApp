@@ -1,4 +1,4 @@
-package com.coderschool.vinh.todoapp;
+package com.coderschool.vinh.todoapp.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;

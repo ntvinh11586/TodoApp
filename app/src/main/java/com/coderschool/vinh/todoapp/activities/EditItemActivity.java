@@ -1,4 +1,4 @@
-package com.coderschool.vinh.todoapp;
+package com.coderschool.vinh.todoapp.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.coderschool.vinh.todoapp.models.DatabaseHandler;
+import com.coderschool.vinh.todoapp.R;
+import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
+import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
 import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.SQLPackage;
 import com.coderschool.vinh.todoapp.models.Task;
