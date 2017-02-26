@@ -13,8 +13,9 @@ import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
-import com.coderschool.vinh.todoapp.models.DatabaseHandler;
+import com.coderschool.vinh.todoapp.data.DatabaseHandler;
 import com.coderschool.vinh.todoapp.models.Date;
+import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.SQLPackage;
 import com.coderschool.vinh.todoapp.models.Task;
 
@@ -33,8 +34,8 @@ public class MainActivity extends AppCompatActivity
     private DatabaseHandler dbTasks;
     private int changedPosition;    // ???
 
-    private ListView lvTasks;
     private FloatingActionButton fab;
+    private ListView lvTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         dbTasks.deleteAllPackages();
         for (Task task : tasks) {
             dbTasks.addPackage(new SQLPackage(task.name, task.priority,
-                    task.date.day, task.date.month, task.date.year));
+                    task.date.getDay(), task.date.getMonth(), task.date.getYear()));
         }
     }
 
@@ -78,10 +79,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskDialogFinished(int isChanged,
-                                     final String taskName,
-                                     final String priority,
-                                     final Date dueDate) {
+    public void onTaskDialogFinished(DialogResponse response) {
+        int isChanged = response.getIsChanged();
+        String taskName = response.getTaskName();
+        String priority = response.getPriority();
+        Date dueDate = response.getDueDate();
+
         if (isChanged == 0) {
             // add on app
             Task newTask = new Task(taskName, priority, dueDate);

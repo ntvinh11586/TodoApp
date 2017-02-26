@@ -15,9 +15,9 @@ import com.coderschool.vinh.todoapp.models.Task;
 import java.util.ArrayList;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
-    TextView tvName;
-    TextView tvDate;
-    TextView tvPriority;
+    private TextView tvName;
+    private TextView tvDate;
+    private TextView tvPriority;
 
     public TaskAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
@@ -38,9 +38,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tvPriority = (TextView)convertView.findViewById(R.id.text_task_priority);
 
         tvDate.setText(
-                Integer.toString(task.date.day) + " "
-                + Date.getMonthString(task.date.month) + ", "
-                + Integer.toString(task.date.year)
+                Integer.toString(task.date.getDay()) + " "
+                + Date.getMonthString(task.date.getMonth()) + ", "
+                + Integer.toString(task.date.getYear())
         );
         tvName.setText(task.name);
 
