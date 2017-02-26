@@ -10,6 +10,7 @@ import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -56,6 +57,12 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PACKAGES, null, values);
         db.close();
+    }
+
+    public void addAllPackages(List<Task> tasks) {
+        for (Task task : tasks) {
+            addPackage(task);
+        }
     }
 
     public ArrayList<Task> getAllPackages() {
