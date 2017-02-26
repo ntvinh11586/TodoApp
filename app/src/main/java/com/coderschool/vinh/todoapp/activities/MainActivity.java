@@ -13,10 +13,11 @@ import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskDialogListener;
-import com.coderschool.vinh.todoapp.models.DatabaseHandler;
 import com.coderschool.vinh.todoapp.models.Date;
-import com.coderschool.vinh.todoapp.models.SQLPackage;
+import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
+import com.coderschool.vinh.todoapp.repositories.DBHandler;
+import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 
 import java.util.ArrayList;
 
@@ -27,14 +28,14 @@ public class MainActivity extends AppCompatActivity
             View.OnClickListener {
     private static final String FRAGMENT_EDIT_NAME = "TaskDialogFragment";
 
+    private FloatingActionButton fab;
+    private ListView lvTasks;
+
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
 
-    private DatabaseHandler dbTasks;
-    private int changedPosition;    // ???
-
-    private ListView lvTasks;
-    private FloatingActionButton fab;
+    private DBHandler dbTasks;
+    private TaskPreferences taskPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +43,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_edit_item);
 
         // get dbTasks
-        dbTasks = new DatabaseHandler(this);
-        ArrayList<SQLPackage> sqlPackages = dbTasks.getAllPackages();
+        dbTasks = new DBHandler(this);
+        ArrayList<Task> sqlPackages = dbTasks.getAllPackages();
 
         tasks = new ArrayList<>();
-        for (SQLPackage pk : sqlPackages) {
-            tasks.add(new Task(pk.name, pk.priority,
-                    new Date(pk.day, pk.month, pk.year)));
+        for (Task pk : sqlPackages) {
+            tasks.add(new Task(pk.name, pk.priority, pk.date));
         }
 
         lvTasks = (ListView)findViewById(R.id.list_task_item);
@@ -62,12 +62,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        taskPreferences = new TaskPreferences(MainActivity.this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         dbTasks.deleteAllPackages();
         for (Task task : tasks) {
-            dbTasks.addPackage(new SQLPackage(task.name, task.priority,
-                    task.date.day, task.date.month, task.date.year));
+            dbTasks.addPackage(task);
         }
     }
 
@@ -78,10 +83,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskDialogFinished(int isChanged,
-                                     final String taskName,
-                                     final String priority,
-                                     final Date dueDate) {
+    public void onTaskDialogFinished(DialogResponse response) {
+        int isChanged = response.getIsChanged();
+        String taskName = response.getTaskName();
+        String priority = response.getPriority();
+        Date dueDate = response.getDueDate();
+
         if (isChanged == 0) {
             // add on app
             Task newTask = new Task(taskName, priority, dueDate);
@@ -89,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             adapter.notifyDataSetChanged();
         } else {
             // update on app
-            Task task = tasks.get(changedPosition);
+            Task task = tasks.get(taskPreferences.getCurrentPosition());
             task.name = taskName;
             task.priority = priority;
             task.date = dueDate;
@@ -108,7 +115,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        changedPosition = position;
+        taskPreferences.setCurrentPosition(position);
         FragmentManager fm = getSupportFragmentManager();
         TaskDialogFragment editNameDialogFragment
                 = TaskDialogFragment.newInstance(tasks.get(position));
@@ -117,8 +124,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.FloatingActionButton) {
-            showEditDialog();
-        }
+        showEditDialog();
     }
 }

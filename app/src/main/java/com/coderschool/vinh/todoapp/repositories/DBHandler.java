@@ -1,4 +1,4 @@
-package com.coderschool.vinh.todoapp.models;
+package com.coderschool.vinh.todoapp.repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,21 +6,24 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.coderschool.vinh.todoapp.models.Date;
+import com.coderschool.vinh.todoapp.models.Task;
+
 import java.util.ArrayList;
 
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "TODOAPP_DATABASE";
+    private static final String DATABASE_NAME = "TODO_APP_DATABASE";
     private static final String TABLE_PACKAGES = "TASK";
 
-    private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_PRIORITY = "priority";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_MONTH = "month";
-    private static final String KEY_YEAR = "year";
+    private static final String KEY_ID = "ID";
+    private static final String KEY_NAME = "NAME";
+    private static final String KEY_PRIORITY = "PRIORITY";
+    private static final String KEY_DAY = "DAY";
+    private static final String KEY_MONTH = "MONTH";
+    private static final String KEY_YEAR = "YEAR";
 
-    public DatabaseHandler(Context context) {
+    public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -42,21 +45,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addPackage(SQLPackage sqlPackage) {
+    public void addPackage(Task sqlPackage) {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, sqlPackage.name);
         values.put(KEY_PRIORITY, sqlPackage.priority);
-        values.put(KEY_DAY, sqlPackage.day);
-        values.put(KEY_MONTH, sqlPackage.month);
-        values.put(KEY_YEAR, sqlPackage.year);
+        values.put(KEY_DAY, sqlPackage.date.day);
+        values.put(KEY_MONTH, sqlPackage.date.month);
+        values.put(KEY_YEAR, sqlPackage.date.year);
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PACKAGES, null, values);
         db.close();
     }
 
-    public ArrayList<SQLPackage> getAllPackages() {
-        ArrayList<SQLPackage> packageList = new ArrayList<>();
+    public ArrayList<Task> getAllPackages() {
+        ArrayList<Task> packageList = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TABLE_PACKAGES;
 
@@ -66,13 +69,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                SQLPackage sqlPackage = new SQLPackage();
+                Task sqlPackage = new Task();
                 sqlPackage.id = Integer.parseInt(cursor.getString(0));
                 sqlPackage.name = cursor.getString(1);
                 sqlPackage.priority = cursor.getString(2);
-                sqlPackage.day = Integer.parseInt(cursor.getString(3));
-                sqlPackage.month = Integer.parseInt(cursor.getString(4));
-                sqlPackage.year = Integer.parseInt(cursor.getString(5));
+                sqlPackage.date = new Date();
+                sqlPackage.date.day = Integer.parseInt(cursor.getString(3));
+                sqlPackage.date.month = Integer.parseInt(cursor.getString(4));
+                sqlPackage.date.year = Integer.parseInt(cursor.getString(5));
                 packageList.add(sqlPackage);
             } while (cursor.moveToNext());
         }

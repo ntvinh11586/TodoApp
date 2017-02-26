@@ -24,6 +24,7 @@ import android.widget.RadioGroup;
 
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.models.Date;
+import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.Calendar;
@@ -50,9 +51,9 @@ public class TaskDialogFragment extends DialogFragment
             args.putInt("available", 1);
             args.putString("name", task.name);
             args.putString("priority", task.priority);
-            args.putInt("day", task.date.day);
-            args.putInt("month", task.date.month);
-            args.putInt("year", task.date.year);
+            args.putInt("day", task.date.getDay());
+            args.putInt("month", task.date.getMonth());
+            args.putInt("year", task.date.getYear());
         } else {
             args.putInt("available", 0);
         }
@@ -166,7 +167,10 @@ public class TaskDialogFragment extends DialogFragment
             Date dueDate = new Date(tpDueDate.getDayOfMonth(), tpDueDate.getMonth() + 1, tpDueDate.getYear());
             String taskName = edTaskName.getText().toString();
             TaskDialogListener listener = (TaskDialogListener) getActivity();
-            listener.onTaskDialogFinished(isChanged, taskName, priority, dueDate);
+
+            listener.onTaskDialogFinished(
+                    new DialogResponse(isChanged, taskName, priority, dueDate)
+            );
             getDialog().dismiss();
         }
     }

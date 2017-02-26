@@ -1,7 +1,7 @@
 package com.coderschool.vinh.todoapp.fragments;
 
-import com.coderschool.vinh.todoapp.models.Date;
+import com.coderschool.vinh.todoapp.models.DialogResponse;
 
 public interface TaskDialogListener {
-        void onTaskDialogFinished(int isChanged, final String taskName, final String priority, final Date dueDate);
-    }
+    void onTaskDialogFinished(DialogResponse response);
+}
