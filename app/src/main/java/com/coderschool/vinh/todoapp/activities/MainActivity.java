@@ -20,100 +20,74 @@ import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
 
-public class EditItemActivity extends AppCompatActivity implements TaskDialogFragment.TaskDialogListener {
+public class MainActivity extends AppCompatActivity
+        implements TaskDialogFragment.TaskDialogListener,
+            AdapterView.OnItemLongClickListener,
+            AdapterView.OnItemClickListener,
+            View.OnClickListener {
+    private static final String FRAGMENT_EDIT_NAME = "TaskDialogFragment";
 
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
 
-    private int changedPosition;
+    private DatabaseHandler dbTasks;
+    private int changedPosition;    // ???
 
     private ListView lvTasks;
-
-    DatabaseHandler dbTasks;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
-        tasks = new ArrayList<Task> ();
-
         // get dbTasks
         dbTasks = new DatabaseHandler(this);
-
         ArrayList<SQLPackage> sqlPackages = dbTasks.getAllPackages();
 
+        tasks = new ArrayList<>();
         for (SQLPackage pk : sqlPackages) {
             tasks.add(new Task(pk.name, pk.priority,
                     new Date(pk.day, pk.month, pk.year)));
         }
 
-        adapter = new TaskAdapter(this, tasks);
-
         lvTasks = (ListView)findViewById(R.id.list_task_item);
-
+        adapter = new TaskAdapter(this, tasks);
         lvTasks.setAdapter(adapter);
+        lvTasks.setOnItemLongClickListener(this);
+        lvTasks.setOnItemClickListener(this);
 
-        // handle events
-        lvTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-                tasks.remove(position);
-                adapter.notifyDataSetChanged();
-                Toast.makeText(EditItemActivity.this, "Delete item at " + position, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
-        lvTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-                changedPosition = position;
-
-                FragmentManager fm = getSupportFragmentManager();
-                TaskDialogFragment editNameDialogFragment = TaskDialogFragment.newInstance(tasks.get(position));
-                editNameDialogFragment.show(fm, "fragment_edit_name");
-            }
-        });
-
-        FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.FloatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditDialog();
-            }
-        });
+        fab = (FloatingActionButton)findViewById(R.id.FloatingActionButton);
+        fab.setOnClickListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         dbTasks.deleteAllPackages();
-
         for (Task task : tasks) {
             dbTasks.addPackage(new SQLPackage(task.name, task.priority,
                     task.date.day, task.date.month, task.date.year));
         }
     }
 
-    // ActionBar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    // TaskDialog handle
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
         TaskDialogFragment editNameDialogFragment = TaskDialogFragment.newInstance(null);
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        editNameDialogFragment.show(fm, FRAGMENT_EDIT_NAME);
     }
 
     @Override
-    public void onFinishTaskDialog(int isChanged, final String taskName, final String priority, final Date dueDate) {
+    public void onFinishTaskDialog(int isChanged,
+                                   final String taskName,
+                                   final String priority,
+                                   final Date dueDate) {
         if (isChanged == 0) {
             // add on app
             Task newTask = new Task(taskName, priority, dueDate);
@@ -126,6 +100,31 @@ public class EditItemActivity extends AppCompatActivity implements TaskDialogFra
             task.priority = priority;
             task.date = dueDate;
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        tasks.remove(position);
+        adapter.notifyDataSetChanged();
+        Toast.makeText(MainActivity.this, "Delete item at " + position, Toast.LENGTH_SHORT).show();
+        // return true or false?
+        return false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        changedPosition = position;
+        FragmentManager fm = getSupportFragmentManager();
+        TaskDialogFragment editNameDialogFragment
+                = TaskDialogFragment.newInstance(tasks.get(position));
+        editNameDialogFragment.show(fm, FRAGMENT_EDIT_NAME);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.FloatingActionButton) {
+            showEditDialog();
         }
     }
 }
