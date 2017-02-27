@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
@@ -41,18 +40,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
-        // get dbTasks
-        dbTasks = new DBHandler(this);
-        ArrayList<Task> sqlPackages = dbTasks.getAllPackages();
-
-        tasks = new ArrayList<>();
-        for (Task pk : sqlPackages) {
-            tasks.add(new Task(pk.name, pk.priority, pk.date));
-        }
-
         lvTasks = (ListView)findViewById(R.id.list_task_item);
-        adapter = new TaskAdapter(this, tasks);
-        lvTasks.setAdapter(adapter);
         lvTasks.setOnItemLongClickListener(this);
         lvTasks.setOnItemClickListener(this);
 
@@ -64,13 +52,19 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         taskPreferences = new TaskPreferences(MainActivity.this);
+        // get dbTasks
+        dbTasks = new DBHandler(this);
+        tasks = dbTasks.getAllTasks();
+        adapter = new TaskAdapter(this, tasks);
+        lvTasks.setAdapter(adapter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        dbTasks.deleteAllPackages();
-        dbTasks.addAllPackages(tasks);
+        if (dbTasks != null) {
+            dbTasks.refreshAllTasks(tasks);
+        }
     }
 
     private void showTaskDialog(Task task) {
@@ -81,33 +75,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskDialogFinished(DialogResponse response) {
-        int isChanged = response.getIsChanged();
+        int isChangeable = response.getIsChangeable();
         String taskName = response.getTaskName();
         String priority = response.getPriority();
         Date dueDate = response.getDueDate();
 
-        if (isChanged == 0) {
-            // add on app
-            Task newTask = new Task(taskName, priority, dueDate);
-            tasks.add(0, newTask);
+        if (isChangeable == 0) { // add on app
+            tasks.add(0, new Task(taskName, priority, dueDate));
             adapter.notifyDataSetChanged();
-        } else {
-            // update on app
-            Task task = tasks.get(taskPreferences.getCurrentPosition());
-            task.name = taskName;
-            task.priority = priority;
-            task.date = dueDate;
-            adapter.notifyDataSetChanged();
+        } else { // update on app
+            int position = taskPreferences.getCurrentPosition();
+            adapter.removeTask(position);
+            adapter.addTask(position, new Task(taskName, priority, dueDate));
         }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        tasks.remove(position);
-        adapter.notifyDataSetChanged();
-        Toast.makeText(MainActivity.this, "Delete item at " + position, Toast.LENGTH_SHORT).show();
-        // return true or false?
-        return false;
+        adapter.removeTask(position);
+        return true;
     }
 
     @Override

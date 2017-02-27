@@ -18,9 +18,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     private TextView tvName;
     private TextView tvDate;
     private TextView tvPriority;
+    private ArrayList<Task> tasks;
 
     public TaskAdapter(Context context, ArrayList<Task> tasks) {
         super(context, 0, tasks);
+        this.tasks = tasks;
     }
 
     @NonNull
@@ -49,6 +51,17 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tvPriority.setTextColor(color);
 
         return convertView;
+    }
+
+
+    public void removeTask(int position) {
+        tasks.remove(position);
+        this.notifyDataSetChanged();
+    }
+
+    public void addTask(int position, Task task) {
+        tasks.add(position, task);
+        this.notifyDataSetChanged();
     }
 }
 

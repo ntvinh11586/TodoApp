@@ -46,7 +46,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addPackage(Task sqlPackage) {
+    public void addTask(Task sqlPackage) {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, sqlPackage.name);
         values.put(KEY_PRIORITY, sqlPackage.priority);
@@ -59,40 +59,42 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addAllPackages(List<Task> tasks) {
+    public void addAllTasks(List<Task> tasks) {
         for (Task task : tasks) {
-            addPackage(task);
+            addTask(task);
         }
     }
 
-    public ArrayList<Task> getAllPackages() {
-        ArrayList<Task> packageList = new ArrayList<>();
-
+    public ArrayList<Task> getAllTasks() {
         String selectQuery = "SELECT * FROM " + TABLE_PACKAGES;
-
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
+        ArrayList<Task> tasks = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                Task sqlPackage = new Task();
-                sqlPackage.id = Integer.parseInt(cursor.getString(0));
-                sqlPackage.name = cursor.getString(1);
-                sqlPackage.priority = cursor.getString(2);
-                sqlPackage.date = new Date();
-                sqlPackage.date.day = Integer.parseInt(cursor.getString(3));
-                sqlPackage.date.month = Integer.parseInt(cursor.getString(4));
-                sqlPackage.date.year = Integer.parseInt(cursor.getString(5));
-                packageList.add(sqlPackage);
+                tasks.add(readTaskFromCursor(cursor));
             } while (cursor.moveToNext());
         }
-
         cursor.close();
-        return packageList;
+        return tasks;
     }
 
-    public void deleteAllPackages() {
+    private Task readTaskFromCursor(Cursor cursor) {
+        Date date = new Date(
+                Integer.parseInt(cursor.getString(3)),
+                Integer.parseInt(cursor.getString(4)),
+                Integer.parseInt(cursor.getString(5))
+        );
+        return new Task(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2),
+                date
+        );
+    }
+
+    public void deleteAllTasks() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -103,5 +105,10 @@ public class DBHandler extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    public void refreshAllTasks(ArrayList<Task> tasks) {
+        deleteAllTasks();
+        addAllTasks(tasks);
     }
 }

@@ -17,7 +17,7 @@ public class DialogResponse {
         this.dueDate = dueDate;
     }
 
-    public int getIsChanged() {
+    public int getIsChangeable() {
         return isChanged;
     }
 
