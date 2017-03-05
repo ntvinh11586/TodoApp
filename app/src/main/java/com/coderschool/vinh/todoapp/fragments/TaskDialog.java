@@ -42,10 +42,6 @@ public class TaskDialog extends DialogFragment
 
     private int isChanged; // ???
 
-    public interface TaskDialogOnFinishedListener {
-        void onTaskDialogFinished(DialogResponse response);
-    }
-
     public TaskDialog() {
     }
 
@@ -88,14 +84,14 @@ public class TaskDialog extends DialogFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        edTaskName = (EditText)view.findViewById(R.id.text_input_text);
-        btnDiscard = (Button)view.findViewById(R.id.button_discard);
-        btnSave = (Button)view.findViewById(R.id.button_save);
-        rgPriority = (RadioGroup)view.findViewById(R.id.radio_group_priority_1);
-        tpDueDate = (DatePicker)view.findViewById(R.id.date_picker_due_date);
-        rbPriorityLow = (RadioButton)view.findViewById(R.id.radio_low);
-        rbPriorityMedium = (RadioButton)view.findViewById(R.id.radio_medium);
-        rbPriorityHigh = (RadioButton)view.findViewById(R.id.radio_high);
+        edTaskName = (EditText) view.findViewById(R.id.text_input_text);
+        btnDiscard = (Button) view.findViewById(R.id.button_discard);
+        btnSave = (Button) view.findViewById(R.id.button_save);
+        rgPriority = (RadioGroup) view.findViewById(R.id.radio_group_priority_1);
+        tpDueDate = (DatePicker) view.findViewById(R.id.date_picker_due_date);
+        rbPriorityLow = (RadioButton) view.findViewById(R.id.radio_low);
+        rbPriorityMedium = (RadioButton) view.findViewById(R.id.radio_medium);
+        rbPriorityHigh = (RadioButton) view.findViewById(R.id.radio_high);
 
         // Solution for enabling IME
         // http://stackoverflow.com/a/14815062/5557789
@@ -166,7 +162,7 @@ public class TaskDialog extends DialogFragment
             getDialog().dismiss();
         } else if (v.getId() == R.id.button_save) {
             int selectedId = rgPriority.getCheckedRadioButtonId();
-            RadioButton rbPriority = (RadioButton)getView().findViewById(selectedId);
+            RadioButton rbPriority = (RadioButton) getView().findViewById(selectedId);
             String priority = rbPriority.getText().toString();
             Date dueDate = new Date(tpDueDate.getDayOfMonth(), tpDueDate.getMonth() + 1, tpDueDate.getYear());
             String taskName = edTaskName.getText().toString();
@@ -194,5 +190,9 @@ public class TaskDialog extends DialogFragment
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    public interface TaskDialogOnFinishedListener {
+        void onTaskDialogFinished(DialogResponse response);
     }
 }

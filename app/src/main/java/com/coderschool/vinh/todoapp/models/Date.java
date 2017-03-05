@@ -15,18 +15,6 @@ public class Date {
         this.year = year;
     }
 
-    public int getDay() {
-        return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
     public static String getMonthString(int month) {
         switch (month) {
             case 1:
@@ -56,5 +44,17 @@ public class Date {
             default:
                 return "Jan";
         }
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getYear() {
+        return year;
     }
 }

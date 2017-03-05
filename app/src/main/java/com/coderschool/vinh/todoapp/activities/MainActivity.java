@@ -21,9 +21,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements TaskDialog.TaskDialogOnFinishedListener,
-            AdapterView.OnItemLongClickListener,
-            AdapterView.OnItemClickListener,
-            View.OnClickListener {
+        AdapterView.OnItemLongClickListener,
+        AdapterView.OnItemClickListener,
+        View.OnClickListener {
     private static final String FRAGMENT_EDIT_NAME = "TaskDialog";
 
     private FloatingActionButton fab;
@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
-        lvTasks = (ListView)findViewById(R.id.list_task_item);
+        lvTasks = (ListView) findViewById(R.id.list_task_item);
         lvTasks.setOnItemLongClickListener(this);
         lvTasks.setOnItemClickListener(this);
 
-        fab = (FloatingActionButton)findViewById(R.id.FloatingActionButton);
+        fab = (FloatingActionButton) findViewById(R.id.FloatingActionButton);
         fab.setOnClickListener(this);
     }
 

@@ -17,14 +17,14 @@ public class TaskPreferences {
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public int getCurrentPosition() {
+        return pref.getInt("currentPosition", -1);
+    }
+
     public void setCurrentPosition(int position) {
         SharedPreferences.Editor edit = pref.edit();
         edit.putInt("currentPosition", position);
         edit.apply();
-    }
-
-    public int getCurrentPosition() {
-        return pref.getInt("currentPosition", -1);
     }
 
 }
