@@ -6,11 +6,17 @@ import android.support.v4.content.ContextCompat;
 
 import com.coderschool.vinh.todoapp.R;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Task {
     public int id;
     public String name;
     public String priority;
     public Date date;
+
+    public Task() {
+    }
 
     public Task(String name, String priority, Date date) {
         this.name = name;

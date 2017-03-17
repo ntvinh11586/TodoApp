@@ -1,6 +1,8 @@
 package com.coderschool.vinh.todoapp.models;
 
+import org.parceler.Parcel;
 
+@Parcel
 public class Date {
     public int day;
     public int month;

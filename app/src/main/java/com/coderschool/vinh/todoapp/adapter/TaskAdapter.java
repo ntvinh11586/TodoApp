@@ -62,5 +62,10 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tasks.add(position, task);
         this.notifyDataSetChanged();
     }
+
+    public void modifyTask(int position, Task task) {
+        removeTask(position);
+        addTask(position, task);
+    }
 }
 

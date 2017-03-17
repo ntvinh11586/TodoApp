@@ -3,6 +3,7 @@ package com.coderschool.vinh.todoapp.fragments;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -27,10 +28,14 @@ import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
 
+import org.parceler.Parcels;
+
 import java.util.Calendar;
 
 public class TaskDialog extends DialogFragment
         implements View.OnClickListener, TextWatcher {
+    public static final String FRAGMENT_EDIT_NAME = "TaskDialog";
+
     private EditText edTaskName;
     private RadioGroup rgPriority;
     private RadioButton rbPriorityLow;
@@ -40,26 +45,29 @@ public class TaskDialog extends DialogFragment
     private Button btnDiscard;
     private Button btnSave;
 
-    private int isChanged; // ???
+    private boolean isChanged; // ???
 
     public TaskDialog() {
     }
 
-    public static TaskDialog newInstance(Task task) {
+    public static TaskDialog newInstance() {
         Bundle args = new Bundle();
-        if (task != null) {
-            args.putInt("available", 1);
-            args.putString("name", task.name);
-            args.putString("priority", task.priority);
-            args.putInt("day", task.date.getDay());
-            args.putInt("month", task.date.getMonth());
-            args.putInt("year", task.date.getYear());
-        } else {
-            args.putInt("available", 0);
-        }
+        args.putBoolean("available", false);
 
         TaskDialog frag = new TaskDialog();
         frag.setArguments(args);
+
+        return frag;
+    }
+
+    public static TaskDialog newInstance(@NonNull Task task) {
+        Bundle args = new Bundle();
+        args.putBoolean("available", true);
+        args.putParcelable("task", Parcels.wrap(task));
+
+        TaskDialog frag = new TaskDialog();
+        frag.setArguments(args);
+
         return frag;
     }
 
@@ -99,14 +107,15 @@ public class TaskDialog extends DialogFragment
         edTaskName.setImeOptions(EditorInfo.IME_ACTION_DONE);
         showSoftKeyboard(edTaskName);
 
-        isChanged = getArguments().getInt("available");
-        if (isChanged == 1) {
-            edTaskName.setText(getArguments().getString("name"));
+        isChanged = getArguments().getBoolean("available");
+        Task task = Parcels.unwrap(getArguments().getParcelable("task"));
+        if (isChanged) {
+            edTaskName.setText(task.name);
             if (!edTaskName.getText().toString().equals("")) {
                 btnSave.setEnabled(true);
             }
 
-            switch (getArguments().getString("priority")) {
+            switch (task.priority) {
                 case "Low":
                     rbPriorityLow.setChecked(true);
                     rbPriorityMedium.setChecked(false);
@@ -124,9 +133,9 @@ public class TaskDialog extends DialogFragment
                     break;
             }
 
-            int day = getArguments().getInt("day");
-            int month = getArguments().getInt("month") - 1;
-            int year = getArguments().getInt("year");
+            int day = task.date.getDay();
+            int month = task.date.getMonth() - 1;
+            int year = task.date.getYear();
 
             tpDueDate.init(year, month, day, null);
         } else {
@@ -162,15 +171,20 @@ public class TaskDialog extends DialogFragment
             getDialog().dismiss();
         } else if (v.getId() == R.id.button_save) {
             int selectedId = rgPriority.getCheckedRadioButtonId();
+
             RadioButton rbPriority = (RadioButton) getView().findViewById(selectedId);
             String priority = rbPriority.getText().toString();
-            Date dueDate = new Date(tpDueDate.getDayOfMonth(), tpDueDate.getMonth() + 1, tpDueDate.getYear());
-            String taskName = edTaskName.getText().toString();
-            TaskDialogOnFinishedListener listener = (TaskDialogOnFinishedListener) getActivity();
-
-            listener.onTaskDialogFinished(
-                    new DialogResponse(isChanged, taskName, priority, dueDate)
+            Date dueDate = new Date(
+                    tpDueDate.getDayOfMonth(),
+                    tpDueDate.getMonth() + 1,
+                    tpDueDate.getYear()
             );
+            String taskName = edTaskName.getText().toString();
+            Task task = new Task(taskName, priority, dueDate);
+
+            TaskDialogOnFinishedListener listener = (TaskDialogOnFinishedListener) getActivity();
+            listener.onTaskDialogFinished(new DialogResponse(isChanged, task));
+
             getDialog().dismiss();
         }
     }
