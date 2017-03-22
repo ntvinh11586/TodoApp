@@ -12,7 +12,7 @@ import com.coderschool.vinh.todoapp.models.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBHandler extends SQLiteOpenHelper {
+public class LocalDBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TODO_APP_DATABASE";
     private static final String TABLE_PACKAGES = "TASK";
@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_MONTH = "MONTH";
     private static final String KEY_YEAR = "YEAR";
 
-    public DBHandler(Context context) {
+    public LocalDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

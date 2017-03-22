@@ -12,7 +12,7 @@ import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskDialog;
 import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
-import com.coderschool.vinh.todoapp.repositories.DBHandler;
+import com.coderschool.vinh.todoapp.repositories.LocalDBHandler;
 import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
 
-    private DBHandler dbTasks;
+    private LocalDBHandler dbTasks;
     private TaskPreferences taskPreferences;
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         taskPreferences = new TaskPreferences(MainActivity.this);
         // get dbTasks
-        dbTasks = new DBHandler(this);
+        dbTasks = new LocalDBHandler(this);
         tasks = dbTasks.getAllTasks();
         adapter = new TaskAdapter(this, tasks);
         lvTasks.setAdapter(adapter);
