@@ -9,10 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.coderschool.vinh.todoapp.R;
-import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
+
+import static com.coderschool.vinh.todoapp.Helpers.DateTimeHelper.getStringDateStandard;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     private TextView tvName;
@@ -36,11 +37,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
 
         tvDate = (TextView) convertView.findViewById(R.id.text_task_date);
-        tvDate.setText(
-                Integer.toString(task.date.getDay()) + " "
-                        + Date.getMonthString(task.date.getMonth()) + ", "
-                        + Integer.toString(task.date.getYear())
-        );
+
+        tvDate.setText(getStringDateStandard(task.date));
+
         tvName = (TextView) convertView.findViewById(R.id.text_task_name);
         tvName.setText(task.name);
 

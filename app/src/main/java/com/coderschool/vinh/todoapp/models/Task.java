@@ -1,6 +1,5 @@
 package com.coderschool.vinh.todoapp.models;
 
-
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
@@ -8,23 +7,25 @@ import com.coderschool.vinh.todoapp.R;
 
 import org.parceler.Parcel;
 
+import java.util.Calendar;
+
 @Parcel
 public class Task {
     public int id;
     public String name;
     public String priority;
-    public Date date;
+    public Calendar date;
 
     public Task() {
     }
 
-    public Task(String name, String priority, Date date) {
+    public Task(String name, String priority, Calendar date) {
         this.name = name;
         this.priority = priority;
         this.date = date;
     }
 
-    public Task(int id, String name, String priority, Date date) {
+    public Task(int id, String name, String priority, Calendar date) {
         this.id = id;
         this.name = name;
         this.priority = priority;

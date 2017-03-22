@@ -24,7 +24,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.coderschool.vinh.todoapp.R;
-import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.DialogResponse;
 import com.coderschool.vinh.todoapp.models.Task;
 
@@ -133,9 +132,9 @@ public class TaskDialog extends DialogFragment
                     break;
             }
 
-            int day = task.date.getDay();
-            int month = task.date.getMonth() - 1;
-            int year = task.date.getYear();
+            int day = task.date.get(Calendar.DAY_OF_MONTH);
+            int month = task.date.get(Calendar.MONTH);
+            int year = task.date.get(Calendar.YEAR);
 
             tpDueDate.init(year, month, day, null);
         } else {
@@ -174,19 +173,26 @@ public class TaskDialog extends DialogFragment
 
             RadioButton rbPriority = (RadioButton) getView().findViewById(selectedId);
             String priority = rbPriority.getText().toString();
-            Date dueDate = new Date(
-                    tpDueDate.getDayOfMonth(),
-                    tpDueDate.getMonth() + 1,
-                    tpDueDate.getYear()
+
+            Task task = new Task(
+                edTaskName.getText().toString(),
+                priority,
+                getDate(tpDueDate)
             );
-            String taskName = edTaskName.getText().toString();
-            Task task = new Task(taskName, priority, dueDate);
 
             TaskDialogOnFinishedListener listener = (TaskDialogOnFinishedListener) getActivity();
             listener.onTaskDialogFinished(new DialogResponse(isChanged, task));
 
             getDialog().dismiss();
         }
+    }
+
+    private Calendar getDate(DatePicker datePicker) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, datePicker.getYear());
+        cal.set(Calendar.MONTH, datePicker.getMonth());
+        cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+        return cal;
     }
 
     @Override

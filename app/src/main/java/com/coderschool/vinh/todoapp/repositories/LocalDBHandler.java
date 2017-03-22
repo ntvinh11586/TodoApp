@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.coderschool.vinh.todoapp.models.Date;
 import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class LocalDBHandler extends SQLiteOpenHelper {
@@ -46,13 +46,13 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addTask(Task sqlPackage) {
+    public void addTask(Task task) {
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, sqlPackage.name);
-        values.put(KEY_PRIORITY, sqlPackage.priority);
-        values.put(KEY_DAY, sqlPackage.date.day);
-        values.put(KEY_MONTH, sqlPackage.date.month);
-        values.put(KEY_YEAR, sqlPackage.date.year);
+        values.put(KEY_NAME, task.name);
+        values.put(KEY_PRIORITY, task.priority);
+        values.put(KEY_DAY, task.date.get(Calendar.DAY_OF_MONTH));
+        values.put(KEY_MONTH, task.date.get(Calendar.MONTH));
+        values.put(KEY_YEAR, task.date.get(Calendar.YEAR));
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PACKAGES, null, values);
@@ -81,10 +81,11 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     }
 
     private Task readTaskFromCursor(Cursor cursor) {
-        Date date = new Date(
-                Integer.parseInt(cursor.getString(3)),
+        Calendar date = Calendar.getInstance();
+        date.set(
+                Integer.parseInt(cursor.getString(5)),
                 Integer.parseInt(cursor.getString(4)),
-                Integer.parseInt(cursor.getString(5))
+                Integer.parseInt(cursor.getString(3))
         );
         return new Task(
                 Integer.parseInt(cursor.getString(0)),
