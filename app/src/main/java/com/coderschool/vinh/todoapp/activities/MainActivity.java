@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
+        dbTasks = new LocalDBHandler(this);
+        taskPreferences = new TaskPreferences(MainActivity.this);
+
         lvTasks = (ListView) findViewById(R.id.list_task_item);
         lvTasks.setOnItemLongClickListener(this);
         lvTasks.setOnItemClickListener(this);
@@ -49,9 +52,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        taskPreferences = new TaskPreferences(MainActivity.this);
-        // get dbTasks
-        dbTasks = new LocalDBHandler(this);
         tasks = dbTasks.getAllTasks();
         adapter = new TaskAdapter(this, tasks);
         lvTasks.setAdapter(adapter);
@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (dbTasks != null) {
             dbTasks.refreshAllTasks(tasks);
         }
+        super.onPause();
     }
 
     private void showTaskDialog(Task task) {
@@ -70,15 +70,16 @@ public class MainActivity extends AppCompatActivity
                 = task != null
                 ? TaskDialog.newInstance(task)
                 : TaskDialog.newInstance();
-
         editNameDialogFragment.show(getSupportFragmentManager(), FRAGMENT_EDIT_NAME);
     }
 
     @Override
     public void onTaskDialogFinished(DialogResponse response) {
-        if (!response.getIsChangeable()) { // add on app
+        // response.getIsChangeable() == true means add one task in todoList.
+        // Otherwise, a task in (int) position will be modified in new window.
+        if (!response.getIsChangeable()) {
             adapter.addTask(0, response.getTask());
-        } else { // update on app
+        } else {
             int position = taskPreferences.getCurrentPosition();
             adapter.modifyTask(position, response.getTask());
         }

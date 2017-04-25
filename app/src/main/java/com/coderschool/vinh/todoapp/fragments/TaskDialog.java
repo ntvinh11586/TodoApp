@@ -35,6 +35,9 @@ public class TaskDialog extends DialogFragment
         implements View.OnClickListener, TextWatcher {
     public static final String FRAGMENT_EDIT_NAME = "TaskDialog";
 
+    public static final String ARGS_AVAILABLE = "Available";
+    public static final String ARGS_TASK = "Task";
+
     private EditText edTaskName;
     private RadioGroup rgPriority;
     private RadioButton rbPriorityLow;
@@ -44,30 +47,30 @@ public class TaskDialog extends DialogFragment
     private Button btnDiscard;
     private Button btnSave;
 
-    private boolean isChanged; // ???
+    private boolean isChangedTask;
 
     public TaskDialog() {
     }
 
     public static TaskDialog newInstance() {
         Bundle args = new Bundle();
-        args.putBoolean("available", false);
+        args.putBoolean(ARGS_AVAILABLE, false);
 
-        TaskDialog frag = new TaskDialog();
-        frag.setArguments(args);
+        TaskDialog taskDialogFragment = new TaskDialog();
+        taskDialogFragment.setArguments(args);
 
-        return frag;
+        return taskDialogFragment;
     }
 
     public static TaskDialog newInstance(@NonNull Task task) {
         Bundle args = new Bundle();
-        args.putBoolean("available", true);
-        args.putParcelable("task", Parcels.wrap(task));
+        args.putBoolean(ARGS_AVAILABLE, true);
+        args.putParcelable(ARGS_TASK, Parcels.wrap(task));
 
-        TaskDialog frag = new TaskDialog();
-        frag.setArguments(args);
+        TaskDialog taskDialogFragment = new TaskDialog();
+        taskDialogFragment.setArguments(args);
 
-        return frag;
+        return taskDialogFragment;
     }
 
     @Nullable
@@ -91,7 +94,6 @@ public class TaskDialog extends DialogFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        edTaskName = (EditText) view.findViewById(R.id.text_input_text);
         btnDiscard = (Button) view.findViewById(R.id.button_discard);
         btnSave = (Button) view.findViewById(R.id.button_save);
         rgPriority = (RadioGroup) view.findViewById(R.id.radio_group_priority_1);
@@ -100,15 +102,23 @@ public class TaskDialog extends DialogFragment
         rbPriorityMedium = (RadioButton) view.findViewById(R.id.radio_medium);
         rbPriorityHigh = (RadioButton) view.findViewById(R.id.radio_high);
 
-        // Solution for enabling IME
+        // Enabling IME Solution:
         // http://stackoverflow.com/a/14815062/5557789
+        edTaskName = (EditText) view.findViewById(R.id.text_input_text);
         edTaskName.setInputType(EditorInfo.TYPE_CLASS_TEXT);
         edTaskName.setImeOptions(EditorInfo.IME_ACTION_DONE);
         showSoftKeyboard(edTaskName);
+        setupTaskName();
 
-        isChanged = getArguments().getBoolean("available");
+        edTaskName.addTextChangedListener(this);
+        btnDiscard.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
+    }
+
+    private void setupTaskName() {
+        isChangedTask = getArguments().getBoolean("available");
         Task task = Parcels.unwrap(getArguments().getParcelable("task"));
-        if (isChanged) {
+        if (task != null) {
             edTaskName.setText(task.name);
             if (!edTaskName.getText().toString().equals("")) {
                 btnSave.setEnabled(true);
@@ -145,10 +155,6 @@ public class TaskDialog extends DialogFragment
                     null
             );
         }
-
-        edTaskName.addTextChangedListener(this);
-        btnDiscard.setOnClickListener(this);
-        btnSave.setOnClickListener(this);
     }
 
     @Override
@@ -175,13 +181,13 @@ public class TaskDialog extends DialogFragment
             String priority = rbPriority.getText().toString();
 
             Task task = new Task(
-                edTaskName.getText().toString(),
-                priority,
-                getDate(tpDueDate)
+                    edTaskName.getText().toString(),
+                    priority,
+                    getDate(tpDueDate)
             );
 
             TaskDialogOnFinishedListener listener = (TaskDialogOnFinishedListener) getActivity();
-            listener.onTaskDialogFinished(new DialogResponse(isChanged, task));
+            listener.onTaskDialogFinished(new DialogResponse(isChangedTask, task));
 
             getDialog().dismiss();
         }
