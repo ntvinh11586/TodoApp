@@ -29,7 +29,7 @@ import java.util.Calendar;
 public class TaskDialogFragment
         extends DialogFragment
         implements View.OnClickListener, TextWatcher {
-    public static final String FRAGMENT_EDIT_NAME = "TaskDialog";
+    public static final String TASK_DIALOG_FRAGMENT = "TaskDialogFragment";
 
     protected static final String ARGS_AVAILABLE = "Available";
     protected static final String ARGS_TASK = "Task";
@@ -126,6 +126,9 @@ public class TaskDialogFragment
     void onClickSaveButton() {
     }
 
+    protected void setupTaskNameBehavior() {
+    }
+
     public void showSoftKeyboard(View view) {
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager)
@@ -133,9 +136,6 @@ public class TaskDialogFragment
         // it only works when we set SHOW_FORCED instead of IMPLICIT
         // http://stackoverflow.com/a/8991563/5557789 (in comment)
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-    }
-
-    protected void setupTaskNameBehavior() {
     }
 
     protected Calendar getDate(DatePicker datePicker) {

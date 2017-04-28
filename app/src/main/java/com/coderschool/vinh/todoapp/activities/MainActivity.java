@@ -1,6 +1,7 @@
 package com.coderschool.vinh.todoapp.activities;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 
 import java.util.ArrayList;
 
-import static com.coderschool.vinh.todoapp.fragments.TaskDialogFragment.FRAGMENT_EDIT_NAME;
+import static com.coderschool.vinh.todoapp.fragments.TaskDialogFragment.TASK_DIALOG_FRAGMENT;
 
 public class MainActivity extends AppCompatActivity
         implements TaskEditorDialogFragment.TaskEditorDialogOnFinishedListener,
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
         View.OnClickListener {
     private ListView lvTasks;
     private FloatingActionButton fab;
+
+    private TaskDialogFragment taskDialogFragment;
 
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
@@ -67,12 +70,11 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
     }
 
-    private void showTaskDialog(Task task) {
-        TaskDialogFragment editNameDialogFragment
-                = task != null
+    private void showTaskDialog(@Nullable Task task) {
+        taskDialogFragment = task != null
                 ? TaskEditorDialogFragment.newInstance(task)
                 : TaskCreatorDialogFragment.newInstance();
-        editNameDialogFragment.show(getSupportFragmentManager(), FRAGMENT_EDIT_NAME);
+        taskDialogFragment.show(getSupportFragmentManager(), TASK_DIALOG_FRAGMENT);
     }
 
     @Override
