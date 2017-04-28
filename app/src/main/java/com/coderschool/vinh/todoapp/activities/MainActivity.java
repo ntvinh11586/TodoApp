@@ -9,23 +9,25 @@ import android.widget.ListView;
 
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
-import com.coderschool.vinh.todoapp.fragments.TaskDialog;
-import com.coderschool.vinh.todoapp.models.DialogResponse;
+import com.coderschool.vinh.todoapp.fragments.TaskCreatorDialogFragment;
+import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
+import com.coderschool.vinh.todoapp.fragments.TaskEditorDialogFragment;
 import com.coderschool.vinh.todoapp.models.Task;
 import com.coderschool.vinh.todoapp.repositories.LocalDBHandler;
 import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 
 import java.util.ArrayList;
 
-import static com.coderschool.vinh.todoapp.fragments.TaskDialog.FRAGMENT_EDIT_NAME;
+import static com.coderschool.vinh.todoapp.fragments.TaskDialogFragment.FRAGMENT_EDIT_NAME;
 
 public class MainActivity extends AppCompatActivity
-        implements TaskDialog.TaskDialogOnFinishedListener,
+        implements TaskEditorDialogFragment.TaskEditorDialogOnFinishedListener,
+        TaskCreatorDialogFragment.TaskCreatorDialogOnFinishedListener,
         AdapterView.OnItemLongClickListener,
         AdapterView.OnItemClickListener,
         View.OnClickListener {
-    private FloatingActionButton fab;
     private ListView lvTasks;
+    private FloatingActionButton fab;
 
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
@@ -66,23 +68,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showTaskDialog(Task task) {
-        TaskDialog editNameDialogFragment
+        TaskDialogFragment editNameDialogFragment
                 = task != null
-                ? TaskDialog.newInstance(task)
-                : TaskDialog.newInstance();
+                ? TaskEditorDialogFragment.newInstance(task)
+                : TaskCreatorDialogFragment.newInstance();
         editNameDialogFragment.show(getSupportFragmentManager(), FRAGMENT_EDIT_NAME);
-    }
-
-    @Override
-    public void onTaskDialogFinished(DialogResponse response) {
-        // response.getIsChangeable() == true means add one task in todoList.
-        // Otherwise, a task in (int) position will be modified in new window.
-        if (!response.getIsChangeable()) {
-            adapter.addTask(0, response.getTask());
-        } else {
-            int position = taskPreferences.getCurrentPosition();
-            adapter.modifyTask(position, response.getTask());
-        }
     }
 
     @Override
@@ -100,5 +90,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         showTaskDialog(null);
+    }
+
+    @Override
+    public void onTaskCreatorDialogFinished(Task task) {
+        adapter.addTask(0, task);
+    }
+
+    @Override
+    public void onTaskEditorDialogFinished(Task task) {
+        int position = taskPreferences.getCurrentPosition();
+        adapter.modifyTask(position, task);
     }
 }
