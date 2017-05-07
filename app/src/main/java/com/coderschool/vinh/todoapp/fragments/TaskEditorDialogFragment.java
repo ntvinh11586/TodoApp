@@ -32,7 +32,7 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     @Override
     protected void setupTaskNameBehavior() {
         super.setupTaskNameBehavior();
-        Task task = Parcels.unwrap(getArguments().getParcelable("task"));
+        Task task = Parcels.unwrap(getArguments().getParcelable(ARGS_TASK));
         edTaskName.setText(task.name);
         if (!edTaskName.getText().toString().equals("")) {
             btnSave.setEnabled(true);
