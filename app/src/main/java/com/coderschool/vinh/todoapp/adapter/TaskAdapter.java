@@ -14,7 +14,6 @@ import com.coderschool.vinh.todoapp.models.Task;
 
 import java.util.ArrayList;
 
-
 public class TaskAdapter extends ArrayAdapter<Task> {
     private TextView tvName;
     private TextView tvDate;

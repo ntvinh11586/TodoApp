@@ -4,16 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-/**
- * Created by vinh on 2/26/17.
- */
-
 public class TaskPreferences {
-    private Context context;
     private SharedPreferences pref;
 
     public TaskPreferences(Context context) {
-        this.context = context;
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -26,5 +20,4 @@ public class TaskPreferences {
         edit.putInt("currentPosition", position);
         edit.apply();
     }
-
 }

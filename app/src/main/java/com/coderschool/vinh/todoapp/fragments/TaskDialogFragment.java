@@ -133,7 +133,7 @@ public class TaskDialogFragment
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        // it only works when we set SHOW_FORCED instead of IMPLICIT
+        // It only works when we set SHOW_FORCED instead of IMPLICIT
         // http://stackoverflow.com/a/8991563/5557789 (in comment)
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }

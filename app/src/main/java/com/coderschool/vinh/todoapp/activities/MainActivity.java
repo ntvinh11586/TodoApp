@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskEditorDialogFinished(Task task) {
-        int position = taskPreferences.getCurrentPosition();
-        adapter.modifyTask(position, task);
+        adapter.modifyTask(taskPreferences.getCurrentPosition(), task);
     }
 }

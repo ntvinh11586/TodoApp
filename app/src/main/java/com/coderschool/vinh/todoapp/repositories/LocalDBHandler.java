@@ -39,11 +39,14 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PACKAGES_TABLE = "CREATE TABLE " + TABLE_PACKAGES + "("
+        String CREATE_PACKAGES_TABLE =
+                "CREATE TABLE " + TABLE_PACKAGES
+                + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PRIORITY + " TEXT,"
-                + KEY_DATE + " DATE" + ")";
+                + KEY_DATE + " DATE"
+                + ")";
         db.execSQL(CREATE_PACKAGES_TABLE);
     }
 
