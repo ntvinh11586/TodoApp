@@ -43,6 +43,12 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Override
     protected void setupTaskDialogBehavior() {
         super.setupTaskDialogBehavior();
         Task task = Parcels.unwrap(getArguments().getParcelable(ARGS_TASK));

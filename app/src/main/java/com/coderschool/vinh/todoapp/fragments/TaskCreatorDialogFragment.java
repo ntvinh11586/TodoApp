@@ -35,6 +35,12 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Override
     protected void setupTaskDialogBehavior() {
         super.setupTaskDialogBehavior();
         tpDueDate.init(
