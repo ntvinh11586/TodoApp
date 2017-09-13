@@ -1,5 +1,7 @@
 package com.coderschool.vinh.todoapp.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.RadioButton;
@@ -11,17 +13,20 @@ import org.parceler.Parcels;
 import java.util.Calendar;
 
 public class TaskEditorDialogFragment extends TaskDialogFragment {
+    private static final String ARGS_TASK = "Task";
+    private static final String ARGS_POSITION = "Position";
+
     private TaskEditorDialogOnFinishedListener listener;
 
     public interface TaskEditorDialogOnFinishedListener
             extends TaskDialogOnFinishedListener {
-        void onTaskEditorDialogFinished(Task task);
+        void onTaskEditorDialogFinished(Task task, int position);
     }
 
-    public static TaskDialogFragment newInstance(@NonNull Task task) {
+    public static TaskDialogFragment newInstance(@NonNull Task task, int position) {
         Bundle args = new Bundle();
-        args.putBoolean(ARGS_AVAILABLE, true);
         args.putParcelable(ARGS_TASK, Parcels.wrap(task));
+        args.putInt(ARGS_POSITION, position);
 
         TaskDialogFragment taskDialogFragment = new TaskEditorDialogFragment();
         taskDialogFragment.setArguments(args);
@@ -30,8 +35,16 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    protected void setupTaskNameBehavior() {
-        super.setupTaskNameBehavior();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            listener = (TaskEditorDialogOnFinishedListener) getActivity();
+        }
+    }
+
+    @Override
+    protected void setupTaskDialogBehavior() {
+        super.setupTaskDialogBehavior();
         Task task = Parcels.unwrap(getArguments().getParcelable(ARGS_TASK));
         edTaskName.setText(task.name);
         if (!edTaskName.getText().toString().equals("")) {
@@ -66,22 +79,28 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     @Override
     void onClickSaveButton() {
         super.onClickSaveButton();
-        RadioButton rbPriority = (RadioButton) getView().findViewById(
-                rgPriority.getCheckedRadioButtonId()
-        );
-        String priority = rbPriority.getText().toString();
-        String taskName = edTaskName.getText().toString();
 
-        Task task = new Task(taskName, priority, getDate(tpDueDate));
-        listener = (TaskEditorDialogOnFinishedListener) getActivity();
-        listener.onTaskEditorDialogFinished(task);
+        if (getView() != null) {
+            RadioButton rbPriority = (RadioButton) getView().findViewById(
+                    rgPriority.getCheckedRadioButtonId()
+            );
+            String priority = rbPriority.getText().toString();
+            String taskName = edTaskName.getText().toString();
+            Calendar date = getDate(tpDueDate);
+            int position = getArguments().getInt(ARGS_POSITION);
 
-        getDialog().dismiss();
+            listener.onTaskEditorDialogFinished(
+                    new Task(taskName, priority, date),
+                    position
+            );
+        }
+
+        dismiss();
     }
 
     @Override
     void onClickDiscardButton() {
         super.onClickDiscardButton();
-        getDialog().dismiss();
+        dismiss();
     }
 }

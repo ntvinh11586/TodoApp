@@ -26,14 +26,8 @@ import com.coderschool.vinh.todoapp.R;
 
 import java.util.Calendar;
 
-public class TaskDialogFragment
-        extends DialogFragment
+public class TaskDialogFragment extends DialogFragment
         implements View.OnClickListener, TextWatcher {
-    public static final String TASK_DIALOG_FRAGMENT = "TaskDialogFragment";
-
-    protected static final String ARGS_AVAILABLE = "Available";
-    protected static final String ARGS_TASK = "Task";
-
     protected EditText edTaskName;
     protected RadioGroup rgPriority;
     protected RadioButton rbPriorityLow;
@@ -58,8 +52,6 @@ public class TaskDialogFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnDiscard = (Button) view.findViewById(R.id.button_discard);
-        btnSave = (Button) view.findViewById(R.id.button_save);
         rgPriority = (RadioGroup) view.findViewById(R.id.radio_group_priority_1);
         tpDueDate = (DatePicker) view.findViewById(R.id.date_picker_due_date);
         rbPriorityLow = (RadioButton) view.findViewById(R.id.radio_low);
@@ -71,12 +63,16 @@ public class TaskDialogFragment
         edTaskName = (EditText) view.findViewById(R.id.text_input_text);
         edTaskName.setInputType(EditorInfo.TYPE_CLASS_TEXT);
         edTaskName.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        showSoftKeyboard(edTaskName);
-        setupTaskNameBehavior();
-
         edTaskName.addTextChangedListener(this);
+        showSoftKeyboard(edTaskName);
+
+        btnDiscard = (Button) view.findViewById(R.id.button_discard);
         btnDiscard.setOnClickListener(this);
+
+        btnSave = (Button) view.findViewById(R.id.button_save);
         btnSave.setOnClickListener(this);
+
+        setupTaskDialogBehavior();
     }
 
     @Override
@@ -109,10 +105,12 @@ public class TaskDialogFragment
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (edTaskName.getText().toString().equals("")) {
-            btnSave.setEnabled(false);
-        } else {
-            btnSave.setEnabled(true);
+        if (getView() != null) {
+            if (edTaskName.getText().toString().equals("")) {
+                btnSave.setEnabled(false);
+            } else {
+                btnSave.setEnabled(true);
+            }
         }
     }
 
@@ -126,7 +124,7 @@ public class TaskDialogFragment
     void onClickSaveButton() {
     }
 
-    protected void setupTaskNameBehavior() {
+    protected void setupTaskDialogBehavior() {
     }
 
     public void showSoftKeyboard(View view) {
@@ -139,10 +137,10 @@ public class TaskDialogFragment
     }
 
     protected Calendar getDate(DatePicker datePicker) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, datePicker.getYear());
-        cal.set(Calendar.MONTH, datePicker.getMonth());
-        cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-        return cal;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, datePicker.getYear());
+        calendar.set(Calendar.MONTH, datePicker.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+        return calendar;
     }
 }

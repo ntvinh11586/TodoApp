@@ -1,7 +1,6 @@
 package com.coderschool.vinh.todoapp.activities;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,15 +10,11 @@ import android.widget.ListView;
 import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskCreatorDialogFragment;
-import com.coderschool.vinh.todoapp.fragments.TaskDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskEditorDialogFragment;
 import com.coderschool.vinh.todoapp.models.Task;
 import com.coderschool.vinh.todoapp.repositories.LocalDBHandler;
-import com.coderschool.vinh.todoapp.repositories.TaskPreferences;
 
 import java.util.ArrayList;
-
-import static com.coderschool.vinh.todoapp.fragments.TaskDialogFragment.TASK_DIALOG_FRAGMENT;
 
 public class MainActivity extends AppCompatActivity
         implements TaskEditorDialogFragment.TaskEditorDialogOnFinishedListener,
@@ -30,21 +25,15 @@ public class MainActivity extends AppCompatActivity
     private ListView lvTasks;
     private FloatingActionButton fab;
 
-    private TaskDialogFragment taskDialogFragment;
-
     private TaskAdapter adapter;
     private ArrayList<Task> tasks;
 
     private LocalDBHandler dbTasks;
-    private TaskPreferences taskPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-
-        dbTasks = new LocalDBHandler(this);
-        taskPreferences = new TaskPreferences(MainActivity.this);
 
         lvTasks = (ListView) findViewById(R.id.list_task_item);
         lvTasks.setOnItemLongClickListener(this);
@@ -52,11 +41,12 @@ public class MainActivity extends AppCompatActivity
 
         fab = (FloatingActionButton) findViewById(R.id.FloatingActionButton);
         fab.setOnClickListener(this);
+
+        loadData();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void loadData() {
+        dbTasks = new LocalDBHandler(this);
         tasks = dbTasks.getAllTasks();
         adapter = new TaskAdapter(this, tasks);
         lvTasks.setAdapter(adapter);
@@ -70,13 +60,6 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
     }
 
-    private void showTaskDialog(@Nullable Task task) {
-        taskDialogFragment = task != null
-                ? TaskEditorDialogFragment.newInstance(task)
-                : TaskCreatorDialogFragment.newInstance();
-        taskDialogFragment.show(getSupportFragmentManager(), TASK_DIALOG_FRAGMENT);
-    }
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         adapter.removeTask(position);
@@ -85,13 +68,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        taskPreferences.setCurrentPosition(position);
-        showTaskDialog(tasks.get(position));
+        TaskEditorDialogFragment.newInstance(tasks.get(position), position)
+                .show(getSupportFragmentManager(), null);
     }
 
     @Override
     public void onClick(View v) {
-        showTaskDialog(null);
+        TaskCreatorDialogFragment.newInstance()
+                .show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -100,7 +84,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskEditorDialogFinished(Task task) {
-        adapter.modifyTask(taskPreferences.getCurrentPosition(), task);
+    public void onTaskEditorDialogFinished(Task task, int position) {
+        adapter.modifyTask(position, task);
     }
 }

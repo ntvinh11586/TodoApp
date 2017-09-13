@@ -1,5 +1,7 @@
 package com.coderschool.vinh.todoapp.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.RadioButton;
 
@@ -17,7 +19,6 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
 
     public static TaskDialogFragment newInstance() {
         Bundle args = new Bundle();
-        args.putBoolean(ARGS_AVAILABLE, false);
 
         TaskDialogFragment taskDialogFragment = new TaskCreatorDialogFragment();
         taskDialogFragment.setArguments(args);
@@ -26,8 +27,16 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    protected void setupTaskNameBehavior() {
-        super.setupTaskNameBehavior();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            listener = (TaskCreatorDialogOnFinishedListener) getActivity();
+        }
+    }
+
+    @Override
+    protected void setupTaskDialogBehavior() {
+        super.setupTaskDialogBehavior();
         tpDueDate.init(
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
@@ -40,22 +49,23 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
     void onClickSaveButton() {
         super.onClickSaveButton();
 
-        RadioButton rbPriority = (RadioButton) getView().findViewById(
-                rgPriority.getCheckedRadioButtonId()
-        );
-        String priority = rbPriority.getText().toString();
-        String taskName = edTaskName.getText().toString();
+        if (getView() != null) {
+            RadioButton rbPriority = (RadioButton) getView().findViewById(
+                    rgPriority.getCheckedRadioButtonId()
+            );
+            String priority = rbPriority.getText().toString();
+            String taskName = edTaskName.getText().toString();
 
-        Task task = new Task(taskName, priority, getDate(tpDueDate));
-        listener = (TaskCreatorDialogOnFinishedListener) getActivity();
-        listener.onTaskCreatorDialogFinished(task);
+            Task task = new Task(taskName, priority, getDate(tpDueDate));
+            listener.onTaskCreatorDialogFinished(task);
+        }
 
-        getDialog().dismiss();
+        dismiss();
     }
 
     @Override
     void onClickDiscardButton() {
         super.onClickDiscardButton();
-        getDialog().dismiss();
+        dismiss();
     }
 }
