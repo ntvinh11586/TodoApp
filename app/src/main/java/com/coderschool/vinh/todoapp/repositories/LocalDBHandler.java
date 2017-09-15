@@ -5,21 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import com.coderschool.vinh.todoapp.helpers.DateTimeHelper;
 import com.coderschool.vinh.todoapp.models.Task;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class LocalDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static LocalDBHandler localDBHandler;
+
     private static final String DATABASE_NAME = "TODO_APP_DATABASE";
+    private static final int DATABASE_VERSION = 1;
     private static final String TABLE_PACKAGES = "TASK";
 
     private static final String KEY_ID = "ID";
@@ -33,7 +32,15 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final int KEY_PRIORITY_INDEX = 2;
     private static final int KEY_DATE_INDEX = 3;
 
-    public LocalDBHandler(Context context) {
+
+    public static synchronized LocalDBHandler getInstance(Context context) {
+        if (localDBHandler == null) {
+            localDBHandler = new LocalDBHandler(context);
+        }
+        return localDBHandler;
+    }
+
+    private LocalDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -41,30 +48,40 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PACKAGES_TABLE =
                 "CREATE TABLE " + TABLE_PACKAGES
-                + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_NAME + " TEXT,"
-                + KEY_PRIORITY + " TEXT,"
-                + KEY_DATE + " DATE"
-                + ")";
+                        + "("
+                        + KEY_ID + " INTEGER PRIMARY KEY,"
+                        + KEY_NAME + " TEXT,"
+                        + KEY_PRIORITY + " TEXT,"
+                        + KEY_DATE + " DATE"
+                        + ")";
         db.execSQL(CREATE_PACKAGES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGES);
-        onCreate(db);
+        if (oldVersion != newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGES);
+            onCreate(db);
+        }
     }
 
     public void addTask(Task task) {
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, task.name);
-        values.put(KEY_PRIORITY, task.priority);
-        values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.date));
+        SQLiteDatabase db = getWritableDatabase();
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_PACKAGES, null, values);
-        db.close();
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, task.name);
+            values.put(KEY_PRIORITY, task.priority);
+            values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.date));
+
+            db.insertOrThrow(TABLE_PACKAGES, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public void addAllTasks(List<Task> tasks) {
@@ -73,37 +90,51 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<Task> getAllTasks() {
-        String selectQuery = "SELECT * FROM " + TABLE_PACKAGES;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+    public List<Task> getTasks() {
+        SQLiteDatabase db = getWritableDatabase();
+        List<Task> tasks = new ArrayList<>();
 
-        ArrayList<Task> tasks = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
-                tasks.add(readTaskFromCursor(cursor));
-            } while (cursor.moveToNext());
+        db.beginTransaction();
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PACKAGES, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Task task = getTaskFromCursor(cursor);
+                    if (task != null) {
+                        tasks.add(task);
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
         }
-        cursor.close();
+
         return tasks;
     }
 
-    private Task readTaskFromCursor(Cursor cursor) {
-        Calendar date = Calendar.getInstance();
+    private Task getTaskFromCursor(@NonNull Cursor cursor) {
+        int id = Integer.parseInt(cursor.getString(KEY_ID_INDEX));
+        String name = cursor.getString(KEY_NAME_INDEX);
+        String priority = cursor.getString(KEY_PRIORITY_INDEX);
+        Calendar date = DateTimeHelper.getCalendarFullStandardPattern(cursor.getString(KEY_DATE_INDEX));
 
-        try {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            date.setTime(formatter.parse(cursor.getString(KEY_DATE_INDEX)));
-            return new Task(
-                    Integer.parseInt(cursor.getString(KEY_ID_INDEX)),
-                    cursor.getString(KEY_NAME_INDEX),
-                    cursor.getString(KEY_PRIORITY_INDEX),
-                    date
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
+        if (isTaskDataValidated(id, name, priority, date)) {
+            return new Task(id, name, priority, date);
         }
+        return null;
+    }
+
+    private boolean isTaskDataValidated(int id, String name, String priority, Calendar date) {
+        return id >= 0 && name != null && priority != null & date != null;
     }
 
     public void deleteAllTasks() {
@@ -119,7 +150,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void refreshAllTasks(ArrayList<Task> tasks) {
+    public void refreshTasks(List<Task> tasks) {
         deleteAllTasks();
         addAllTasks(tasks);
     }

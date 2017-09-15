@@ -13,14 +13,14 @@ import com.coderschool.vinh.todoapp.helpers.ColorUtils;
 import com.coderschool.vinh.todoapp.helpers.DateTimeHelper;
 import com.coderschool.vinh.todoapp.models.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     private TextView tvName;
     private TextView tvDate;
     private TextView tvPriority;
 
-    public TaskAdapter(Context context, ArrayList<Task> tasks) {
+    public TaskAdapter(Context context, List<Task> tasks) {
         super(context, 0, tasks);
     }
 

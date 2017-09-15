@@ -14,7 +14,7 @@ import com.coderschool.vinh.todoapp.fragments.TaskEditorDialogFragment;
 import com.coderschool.vinh.todoapp.models.Task;
 import com.coderschool.vinh.todoapp.repositories.LocalDBHandler;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements TaskEditorDialogFragment.TaskEditorDialogOnFinishedListener,
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     private FloatingActionButton fab;
 
     private TaskAdapter adapter;
-    private ArrayList<Task> tasks;
+    private List<Task> tasks;
 
     private LocalDBHandler dbTasks;
 
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadData() {
-        dbTasks = new LocalDBHandler(this);
-        tasks = dbTasks.getAllTasks();
+        dbTasks = LocalDBHandler.getInstance(this);
+        tasks = dbTasks.getTasks();
         adapter = new TaskAdapter(this, tasks);
         lvTasks.setAdapter(adapter);
     }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         if (dbTasks != null) {
-            dbTasks.refreshAllTasks(tasks);
+            dbTasks.refreshTasks(tasks);
         }
         super.onPause();
     }
@@ -86,5 +86,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTaskEditorDialogFinished(Task task, int position) {
         adapter.modifyTask(position, task);
+    }
+
+    @Override
+    protected void onDestroy() {
+        dbTasks.close();
+        super.onDestroy();
     }
 }
