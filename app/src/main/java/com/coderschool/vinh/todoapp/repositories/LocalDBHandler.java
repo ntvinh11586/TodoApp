@@ -26,13 +26,6 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String KEY_PRIORITY = "PRIORITY";
     private static final String KEY_DATE = "DATE";
 
-    // We can also use cursor.getColumnIndex(KEY_)
-    private static final int KEY_ID_INDEX = 0;
-    private static final int KEY_NAME_INDEX = 1;
-    private static final int KEY_PRIORITY_INDEX = 2;
-    private static final int KEY_DATE_INDEX = 3;
-
-
     public static synchronized LocalDBHandler getInstance(Context context) {
         if (localDBHandler == null) {
             localDBHandler = new LocalDBHandler(context);
@@ -122,10 +115,12 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     }
 
     private Task getTaskFromCursor(@NonNull Cursor cursor) {
-        int id = Integer.parseInt(cursor.getString(KEY_ID_INDEX));
-        String name = cursor.getString(KEY_NAME_INDEX);
-        String priority = cursor.getString(KEY_PRIORITY_INDEX);
-        Calendar date = DateTimeHelper.getCalendarFullStandardPattern(cursor.getString(KEY_DATE_INDEX));
+        int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+        String name = cursor.getString(cursor.getColumnIndex(KEY_NAME));
+        String priority = cursor.getString(cursor.getColumnIndex(KEY_PRIORITY));
+        Calendar date = DateTimeHelper.getCalendarFullStandardPattern(
+                cursor.getString(cursor.getColumnIndex(KEY_DATE))
+        );
 
         if (isTaskDataValidated(id, name, priority, date)) {
             return new Task(id, name, priority, date);

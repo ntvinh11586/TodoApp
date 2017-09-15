@@ -1,5 +1,7 @@
 package com.coderschool.vinh.todoapp.helpers;
 
+import android.support.annotation.Nullable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,7 +18,7 @@ public class DateTimeHelper {
         return simpleDateFormat.format(calendar.getTime());
     }
 
-    public static Calendar getCalendarFullStandardPattern(String stringDate) {
+    @Nullable public static Calendar getCalendarFullStandardPattern(String stringDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         try {
             Calendar calendar = Calendar.getInstance();
