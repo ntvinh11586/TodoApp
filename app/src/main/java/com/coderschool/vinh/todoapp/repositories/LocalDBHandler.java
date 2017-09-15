@@ -71,9 +71,9 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
-            values.put(KEY_NAME, task.name);
-            values.put(KEY_PRIORITY, task.priority);
-            values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.date));
+            values.put(KEY_NAME, task.getName());
+            values.put(KEY_PRIORITY, task.getPriority());
+            values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.getDate()));
 
             db.insertOrThrow(TABLE_PACKAGES, null, values);
             db.setTransactionSuccessful();

@@ -9,9 +9,9 @@ import java.util.Calendar;
 @Parcel
 public class Task {
     public int id;
-    public String name;
-    public String priority;
-    public Calendar date;
+    private String name;
+    private String priority;
+    private Calendar date;
 
     public Task() {
     }
@@ -27,5 +27,21 @@ public class Task {
         this.name = name;
         this.priority = priority;
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public Calendar getDate() {
+        return date;
     }
 }

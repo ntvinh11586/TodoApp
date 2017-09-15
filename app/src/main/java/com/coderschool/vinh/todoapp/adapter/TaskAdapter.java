@@ -35,15 +35,15 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         Task task = getItem(position);
         if (task != null) {
             tvDate = (TextView) convertView.findViewById(R.id.text_task_date);
-            tvDate.setText(DateTimeHelper.getStringDateStandard(task.date));
+            tvDate.setText(DateTimeHelper.getStringDateStandard(task.getDate()));
 
             tvName = (TextView) convertView.findViewById(R.id.text_task_name);
-            tvName.setText(task.name);
+            tvName.setText(task.getName());
 
             tvPriority = (TextView) convertView.findViewById(R.id.text_task_priority);
-            tvPriority.setText(task.priority);
+            tvPriority.setText(task.getPriority());
 
-            int color = ColorUtils.getColor(getContext(), task.priority);
+            int color = ColorUtils.getColor(getContext(), task.getPriority());
             tvPriority.setTextColor(color);
         }
 
