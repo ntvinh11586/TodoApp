@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.coderschool.vinh.todoapp.helpers.DateTimeHelper;
 import com.coderschool.vinh.todoapp.models.Task;
@@ -77,7 +78,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addAllTasks(List<Task> tasks) {
+    public void addTasks(List<Task> tasks) {
         for (Task task : tasks) {
             addTask(task);
         }
@@ -114,6 +115,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return tasks;
     }
 
+    @Nullable
     private Task getTaskFromCursor(@NonNull Cursor cursor) {
         int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
         String name = cursor.getString(cursor.getColumnIndex(KEY_NAME));
@@ -132,7 +134,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return id >= 0 && name != null && priority != null & date != null;
     }
 
-    public void deleteAllTasks() {
+    public void deleteTasks() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
@@ -145,8 +147,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void refreshTasks(List<Task> tasks) {
-        deleteAllTasks();
-        addAllTasks(tasks);
+    public void refreshTasks(@NonNull List<Task> tasks) {
+        deleteTasks();
+        addTasks(tasks);
     }
 }

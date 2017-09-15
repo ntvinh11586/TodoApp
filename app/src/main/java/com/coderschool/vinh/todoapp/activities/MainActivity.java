@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.coderschool.vinh.todoapp.R;
-import com.coderschool.vinh.todoapp.adapter.TaskAdapter;
+import com.coderschool.vinh.todoapp.adapters.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskCreatorDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskEditorDialogFragment;
 import com.coderschool.vinh.todoapp.models.Task;
