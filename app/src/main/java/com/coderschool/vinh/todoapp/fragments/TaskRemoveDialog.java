@@ -49,6 +49,7 @@ public class TaskRemoveDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
+                .setTitle("Delete Task")
                 .setMessage(R.string.are_you_sure_to_delete_this_task)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
