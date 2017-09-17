@@ -19,7 +19,7 @@ public class DateTimeHelper {
     }
 
     @Nullable
-    public static Calendar getCalendarFullStandardPattern(String stringDate) {
+    public static Calendar getCalendarFullStandard(String stringDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         try {
             Calendar calendar = Calendar.getInstance();

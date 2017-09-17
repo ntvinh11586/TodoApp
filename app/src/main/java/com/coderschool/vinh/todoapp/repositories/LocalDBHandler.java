@@ -120,7 +120,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
         String name = cursor.getString(cursor.getColumnIndex(KEY_NAME));
         String priority = cursor.getString(cursor.getColumnIndex(KEY_PRIORITY));
-        Calendar date = DateTimeHelper.getCalendarFullStandardPattern(
+        Calendar date = DateTimeHelper.getCalendarFullStandard(
                 cursor.getString(cursor.getColumnIndex(KEY_DATE))
         );
 

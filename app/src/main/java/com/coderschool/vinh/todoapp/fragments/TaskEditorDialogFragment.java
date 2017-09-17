@@ -53,9 +53,6 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
         super.setupTaskDialogBehavior();
         Task task = Parcels.unwrap(getArguments().getParcelable(ARGS_TASK));
         edTaskName.setText(task.getName());
-        if (!edTaskName.getText().toString().equals("")) {
-            btnSave.setEnabled(true);
-        }
 
         switch (task.getPriority()) {
             case "Low":
@@ -75,10 +72,12 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
                 break;
         }
 
-        int day = task.getDate().get(Calendar.DAY_OF_MONTH);
-        int month = task.getDate().get(Calendar.MONTH);
-        int year = task.getDate().get(Calendar.YEAR);
-        tpDueDate.init(year, month, day, null);
+        tpDueDate.init(
+                task.getDate().get(Calendar.YEAR),
+                task.getDate().get(Calendar.MONTH),
+                task.getDate().get(Calendar.DAY_OF_MONTH),
+                null
+        );
     }
 
     @Override

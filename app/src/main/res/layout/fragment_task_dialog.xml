@@ -7,17 +7,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_half_vertical_margin">
 
         <TextView
             android:id="@+id/textView"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_margin="8dp"
+            android:padding="8dp"
             android:text="TASK NAME"
             android:textColor="@color/colorText"
             android:textStyle="bold" />
@@ -26,78 +26,71 @@
             android:id="@+id/text_input_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView"
-            android:layout_margin="8dp"
             android:hint="Input your task..."
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/textView1"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:padding="8dp"
             android:text="PRIORITY"
             android:textColor="@color/colorText"
             android:textStyle="bold" />
 
         <RadioGroup
-            android:id="@+id/radio_group_priority_1"
+            android:id="@+id/radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <RadioButton
                 android:id="@+id/radio_low"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="Low" />
 
             <RadioButton
                 android:id="@+id/radio_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
                 android:text="Medium" />
 
             <RadioButton
                 android:id="@+id/radio_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
                 android:text="High" />
         </RadioGroup>
 
         <TextView
-            android:id="@+id/textView2"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:padding="8dp"
             android:text="DUE DATE"
             android:textColor="@color/colorText"
             android:textStyle="bold" />
 
         <DatePicker
             android:id="@+id/date_picker_due_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
             android:calendarViewShown="false"
-            android:datePickerMode="spinner" />
+            android:datePickerMode="spinner"
+            android:padding="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <Button
                 android:id="@+id/button_discard"
@@ -106,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/windowBackground"
                 android:text="CANCEL"
-                android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -116,9 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/windowBackground"
-                android:enabled="false"
                 android:text="OK"
-                android:textAllCaps="false"
                 android:textColor="@drawable/drawable_button_save"
                 android:textStyle="bold" />
         </LinearLayout>

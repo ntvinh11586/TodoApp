@@ -52,7 +52,7 @@ public class TaskDialogFragment extends DialogFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rgPriority = (RadioGroup) view.findViewById(R.id.radio_group_priority_1);
+        rgPriority = (RadioGroup) view.findViewById(R.id.radio_group);
         tpDueDate = (DatePicker) view.findViewById(R.id.date_picker_due_date);
         rbPriorityLow = (RadioButton) view.findViewById(R.id.radio_low);
         rbPriorityMedium = (RadioButton) view.findViewById(R.id.radio_medium);
