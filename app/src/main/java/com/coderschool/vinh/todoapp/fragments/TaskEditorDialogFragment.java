@@ -75,8 +75,8 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    void onClickSaveButton() {
-        super.onClickSaveButton();
+    void onSaveButtonClicked() {
+        super.onSaveButtonClicked();
 
         if (getView() != null) {
             RadioButton rbPriority = (RadioButton) getView().findViewById(
@@ -97,8 +97,8 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    void onClickDiscardButton() {
-        super.onClickDiscardButton();
+    void onDiscardButtonClicked() {
+        super.onDiscardButtonClicked();
         dismiss();
     }
 }

@@ -93,9 +93,9 @@ public class TaskDialogFragment extends DialogFragment
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_discard) {
-            onClickDiscardButton();
+            onDiscardButtonClicked();
         } else if (v.getId() == R.id.button_save) {
-            onClickSaveButton();
+            onSaveButtonClicked();
         }
     }
 
@@ -118,10 +118,10 @@ public class TaskDialogFragment extends DialogFragment
     public void afterTextChanged(Editable s) {
     }
 
-    void onClickDiscardButton() {
+    void onDiscardButtonClicked() {
     }
 
-    void onClickSaveButton() {
+    void onSaveButtonClicked() {
     }
 
     protected void setupTaskDialogBehavior() {
