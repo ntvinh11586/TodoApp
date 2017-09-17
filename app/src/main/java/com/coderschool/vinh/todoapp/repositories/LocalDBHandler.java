@@ -147,7 +147,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void refreshTasks(@NonNull List<Task> tasks) {
+    public void refreshTasks() {
+        List<Task> tasks = getTasks();
         deleteTasks();
         addTasks(tasks);
     }

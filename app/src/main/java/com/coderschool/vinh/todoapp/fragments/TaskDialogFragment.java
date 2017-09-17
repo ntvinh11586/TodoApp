@@ -125,6 +125,14 @@ public class TaskDialogFragment extends DialogFragment
     }
 
     protected void setupTaskDialogBehavior() {
+        rbPriorityMedium.setChecked(true);
+        btnSave.setEnabled(false);
+        tpDueDate.init(
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                null
+        );
     }
 
     public void showSoftKeyboard(View view) {

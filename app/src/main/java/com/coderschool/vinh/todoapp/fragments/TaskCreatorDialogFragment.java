@@ -7,8 +7,6 @@ import android.widget.RadioButton;
 
 import com.coderschool.vinh.todoapp.models.Task;
 
-import java.util.Calendar;
-
 public class TaskCreatorDialogFragment extends TaskDialogFragment {
     private TaskCreatorDialogOnFinishedListener listener;
 
@@ -38,17 +36,6 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
     public void onDetach() {
         listener = null;
         super.onDetach();
-    }
-
-    @Override
-    protected void setupTaskDialogBehavior() {
-        super.setupTaskDialogBehavior();
-        tpDueDate.init(
-                Calendar.getInstance().get(Calendar.YEAR),
-                Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-                null
-        );
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.coderschool.vinh.todoapp.helpers.ColorUtils;
 import com.coderschool.vinh.todoapp.helpers.DateTimeHelper;
 import com.coderschool.vinh.todoapp.models.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
@@ -62,6 +63,18 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     public void modifyTask(int position, Task task) {
         removeTask(position);
         addTask(position, task);
+    }
+
+    public List<Task> getTasks() {
+        List<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < getCount(); i++) {
+            tasks.add(getItem(i));
+        }
+        return tasks;
+    }
+
+    public Task getTask(int position) {
+        return getItem(position);
     }
 }
 

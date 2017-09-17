@@ -15,7 +15,7 @@ public class ColorUtils {
             case "High":
                 return ContextCompat.getColor(context, R.color.colorPriorityHigh);
             default:
-                return ContextCompat.getColor(context, R.color.colorPriorityHigh);
+                return ContextCompat.getColor(context, R.color.colorPriorityMedium);
         }
     }
 }

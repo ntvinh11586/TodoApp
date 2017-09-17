@@ -57,17 +57,11 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
         switch (task.getPriority()) {
             case "Low":
                 rbPriorityLow.setChecked(true);
-                rbPriorityMedium.setChecked(false);
-                rbPriorityHigh.setChecked(false);
                 break;
             case "Medium":
-                rbPriorityLow.setChecked(false);
                 rbPriorityMedium.setChecked(true);
-                rbPriorityHigh.setChecked(false);
                 break;
             case "High":
-                rbPriorityLow.setChecked(false);
-                rbPriorityMedium.setChecked(false);
                 rbPriorityHigh.setChecked(true);
                 break;
         }
