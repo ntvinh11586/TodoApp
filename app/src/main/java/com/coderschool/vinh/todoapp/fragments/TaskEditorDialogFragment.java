@@ -38,7 +38,7 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Activity) {
-            listener = (TaskEditorDialogOnFinishedListener) getActivity();
+            listener = (TaskEditorDialogOnFinishedListener) context;
         }
     }
 
@@ -75,8 +75,8 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    void onSaveButtonClicked() {
-        super.onSaveButtonClicked();
+    void onSaveButtonClick() {
+        super.onSaveButtonClick();
 
         if (getView() != null) {
             RadioButton rbPriority = (RadioButton) getView().findViewById(
@@ -97,8 +97,8 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
     }
 
     @Override
-    void onDiscardButtonClicked() {
-        super.onDiscardButtonClicked();
+    void onDiscardButtonClick() {
+        super.onDiscardButtonClick();
         dismiss();
     }
 }

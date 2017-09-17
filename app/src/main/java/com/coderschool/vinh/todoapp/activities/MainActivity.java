@@ -11,12 +11,14 @@ import com.coderschool.vinh.todoapp.R;
 import com.coderschool.vinh.todoapp.adapters.TaskAdapter;
 import com.coderschool.vinh.todoapp.fragments.TaskCreatorDialogFragment;
 import com.coderschool.vinh.todoapp.fragments.TaskEditorDialogFragment;
+import com.coderschool.vinh.todoapp.fragments.TaskRemoveDialog;
 import com.coderschool.vinh.todoapp.models.Task;
 import com.coderschool.vinh.todoapp.repositories.LocalDBHandler;
 
 public class MainActivity extends AppCompatActivity
         implements TaskEditorDialogFragment.TaskEditorDialogOnFinishedListener,
         TaskCreatorDialogFragment.TaskCreatorDialogOnFinishedListener,
+        TaskRemoveDialog.TaskRemoveDialogListener,
         AdapterView.OnItemLongClickListener,
         AdapterView.OnItemClickListener,
         View.OnClickListener {
@@ -51,14 +53,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         if (dbTasks != null) {
-            dbTasks.refreshTasks();
+            dbTasks.refreshTasks(adapter.getTasks());
         }
         super.onPause();
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        adapter.removeTask(position);
+        TaskRemoveDialog.newInstance(position)
+                .show(getSupportFragmentManager(), null);
         return true;
     }
 
@@ -88,5 +91,14 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         dbTasks.close();
         super.onDestroy();
+    }
+
+    @Override
+    public void onOKButtonClick(int position) {
+        adapter.removeTask(position);
+    }
+
+    @Override
+    public void onCancelButtonClick(int position) {
     }
 }

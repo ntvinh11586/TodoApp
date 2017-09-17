@@ -20,7 +20,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "TODO_APP_DATABASE";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_PACKAGES = "TASK";
+    private static final String TABLE_TASK = "TASK";
 
     private static final String KEY_ID = "ID";
     private static final String KEY_NAME = "NAME";
@@ -41,7 +41,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PACKAGES_TABLE =
-                "CREATE TABLE " + TABLE_PACKAGES
+                "CREATE TABLE " + TABLE_TASK
                         + "("
                         + KEY_ID + " INTEGER PRIMARY KEY,"
                         + KEY_NAME + " TEXT,"
@@ -54,7 +54,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
             onCreate(db);
         }
     }
@@ -69,7 +69,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             values.put(KEY_PRIORITY, task.getPriority());
             values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.getDate()));
 
-            db.insertOrThrow(TABLE_PACKAGES, null, values);
+            db.insertOrThrow(TABLE_TASK, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
         db.beginTransaction();
         try {
-            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PACKAGES, null);
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TASK, null);
 
             if (cursor.moveToFirst()) {
                 do {
@@ -138,7 +138,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            db.delete(TABLE_PACKAGES, null, null);
+            db.delete(TABLE_TASK, null, null);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,8 +147,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void refreshTasks() {
-        List<Task> tasks = getTasks();
+    public void refreshTasks(List<Task> tasks) {
         deleteTasks();
         addTasks(tasks);
     }
