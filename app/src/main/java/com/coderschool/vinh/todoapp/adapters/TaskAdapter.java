@@ -2,6 +2,7 @@ package com.coderschool.vinh.todoapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.coderschool.vinh.todoapp.R;
-import com.coderschool.vinh.todoapp.helpers.ColorUtils;
 import com.coderschool.vinh.todoapp.helpers.DateTimeHelper;
 import com.coderschool.vinh.todoapp.models.Task;
 
@@ -36,21 +36,34 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         Task task = getItem(position);
         if (task != null) {
             tvDate = (TextView) convertView.findViewById(R.id.text_task_date);
-            tvDate.setText(DateTimeHelper.getStringDateStandard(task.getDate()));
+            tvDate.setText(
+                    (DateTimeHelper.createStandardDateTime())
+                            .getStringDate(task.getDate())
+            );
 
             tvName = (TextView) convertView.findViewById(R.id.text_task_name);
             tvName.setText(task.getName());
 
             tvPriority = (TextView) convertView.findViewById(R.id.text_task_priority);
             tvPriority.setText(task.getPriority());
-
-            int color = ColorUtils.getColor(getContext(), task.getPriority());
-            tvPriority.setTextColor(color);
+            tvPriority.setTextColor(getColor(task.getPriority()));
         }
 
         return convertView;
     }
 
+    private int getColor(String colorStr) {
+        switch (colorStr) {
+            case "Low":
+                return ContextCompat.getColor(getContext(), R.color.colorPriorityLow);
+            case "Medium":
+                return ContextCompat.getColor(getContext(), R.color.colorPriorityMedium);
+            case "High":
+                return ContextCompat.getColor(getContext(), R.color.colorPriorityHigh);
+            default:
+                return ContextCompat.getColor(getContext(), R.color.colorPriorityMedium);
+        }
+    }
 
     public void removeTask(int position) {
         remove(getItem(position));

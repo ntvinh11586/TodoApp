@@ -67,7 +67,10 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(KEY_NAME, task.getName());
             values.put(KEY_PRIORITY, task.getPriority());
-            values.put(KEY_DATE, DateTimeHelper.getStringDateFullStandard(task.getDate()));
+            values.put(KEY_DATE,
+                    (DateTimeHelper.createFullStandardDateTime())
+                            .getStringDate(task.getDate())
+            );
 
             db.insertOrThrow(TABLE_TASK, null, values);
             db.setTransactionSuccessful();
@@ -120,7 +123,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID)));
         String name = cursor.getString(cursor.getColumnIndex(KEY_NAME));
         String priority = cursor.getString(cursor.getColumnIndex(KEY_PRIORITY));
-        Calendar date = DateTimeHelper.getCalendarFullStandard(
+        Calendar date = DateTimeHelper.createFullStandardDateTime().getCalendar(
                 cursor.getString(cursor.getColumnIndex(KEY_DATE))
         );
 
