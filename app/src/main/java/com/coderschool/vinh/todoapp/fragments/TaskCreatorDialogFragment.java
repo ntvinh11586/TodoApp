@@ -49,7 +49,7 @@ public class TaskCreatorDialogFragment extends TaskDialogFragment {
             String priority = rbPriority.getText().toString();
             String taskName = edTaskName.getText().toString();
 
-            Task task = new Task(taskName, priority, getDate(tpDueDate));
+            Task task = new Task(taskName, priority, getDateFromPicker(tpDueDate));
             listener.onTaskCreatorDialogFinished(task);
         }
 

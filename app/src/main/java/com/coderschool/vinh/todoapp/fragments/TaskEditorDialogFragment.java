@@ -84,7 +84,7 @@ public class TaskEditorDialogFragment extends TaskDialogFragment {
             );
             String priority = rbPriority.getText().toString();
             String taskName = edTaskName.getText().toString();
-            Calendar date = getDate(tpDueDate);
+            Calendar date = getDateFromPicker(tpDueDate);
             int position = getArguments().getInt(ARGS_POSITION);
 
             listener.onTaskEditorDialogFinished(

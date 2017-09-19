@@ -144,7 +144,7 @@ public class TaskDialogFragment extends DialogFragment
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    protected Calendar getDate(DatePicker datePicker) {
+    protected Calendar getDateFromPicker(DatePicker datePicker) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, datePicker.getYear());
         calendar.set(Calendar.MONTH, datePicker.getMonth());
